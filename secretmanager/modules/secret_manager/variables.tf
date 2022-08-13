@@ -11,10 +11,6 @@ variable "replication" {
   default = {}
 }
 
-variable "secret" {
-  type = string
-}
-
 variable "accessors" {
   type    = list(string)
   default = []

@@ -9,12 +9,11 @@ secret_details = {
   "my-secret" = {
     project_id       = "vm-test-nessus"
     secret_id        = "test-secret-new"
-    secret           = "my-random-password-updated"
     secret_accessors = ["serviceAccount:test-svc@vm-test-nessus.iam.gserviceaccount.com"]
     replication      = {}
     rotation_details = [
       {
-        next_rotation_time = "2022-08-11T09:00:00Z"
+        next_rotation_time = "2022-08-25T09:00:00Z"
         rotation_period    = "2592000s"
       }
     ]

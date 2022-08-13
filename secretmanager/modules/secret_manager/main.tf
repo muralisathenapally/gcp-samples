@@ -5,6 +5,22 @@ terraform {
   }
 }
 
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+resource "google_project_service_identity" "sm_sa" {
+  provider = google-beta
+
+  project = data.google_project.project.project_id
+  service = "secretmanager.googleapis.com"
+}
+
+resource "google_project_iam_member" "sm_sa_pubsub_publisher" {
+  project = data.google_project.project.project_id
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${google_project_service_identity.sm_sa.email}"
+}
 
 resource "google_pubsub_topic" "topic" {
   name    = "${var.project_id}-notification-topic"
@@ -50,13 +66,6 @@ resource "google_secret_manager_secret" "secret" {
   }
 }
 
-# Store actual secret as the latest version if it has been provided.
-resource "google_secret_manager_secret_version" "secret" {
-  for_each    = toset(compact([var.secret]))
-  secret      = google_secret_manager_secret.secret.id
-  secret_data = each.value
-}
-
 # Allow the supplied accounts to read the secret value from Secret Manager
 # Note: this module is non-authoritative and will not remove or modify this role
 # from accounts that were granted the role outside this module.
@@ -66,22 +75,4 @@ resource "google_secret_manager_secret_iam_member" "secret" {
   secret_id = google_secret_manager_secret.secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = each.value
-}
-
-
-data "google_project" "project" {
-  project_id = var.project_id
-}
-
-resource "google_project_service_identity" "sm_sa" {
-  provider = google-beta
-
-  project = data.google_project.project.project_id
-  service = "secretmanager.googleapis.com"
-}
-
-resource "google_project_iam_member" "sm_sa_pubsub_publisher" {
-  project = data.google_project.project.project_id
-  role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${google_project_service_identity.sm_sa.email}"
 }

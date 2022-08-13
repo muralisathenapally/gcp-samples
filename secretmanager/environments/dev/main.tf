@@ -4,7 +4,6 @@ module "secret_manager" {
 
   project_id       = each.value.project_id
   secret_id        = each.value.secret_id
-  secret           = each.value.secret
   accessors        = each.value.secret_accessors
   replication      = each.value.replication
   rotation_details = each.value.rotation_details
