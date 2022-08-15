@@ -76,3 +76,5 @@ resource "google_secret_manager_secret_iam_member" "secret" {
   role      = "roles/secretmanager.secretAccessor"
   member    = each.value
 }
+
+
