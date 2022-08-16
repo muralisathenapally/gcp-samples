@@ -13,7 +13,6 @@ data "google_project" "project" {
 }
 
 resource "google_project_service_identity" "sm_sa" {
-  count = var.setup_secret_manager == "yes" ? 1 : 0
   provider = google-beta
 
   project = data.google_project.project.project_id
@@ -21,10 +20,9 @@ resource "google_project_service_identity" "sm_sa" {
 }
 
 resource "google_project_iam_member" "sm_sa_pubsub_publisher" {
-  count = var.setup_secret_manager == "yes" ? 1 : 0
   project = data.google_project.project.project_id
   role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${google_project_service_identity.sm_sa[0].email}"
+  member  = "serviceAccount:${google_project_service_identity.sm_sa.email}"
 }
 
 resource "google_pubsub_topic" "topic" {
@@ -35,6 +33,7 @@ resource "google_pubsub_topic" "topic" {
 
 # Create a slot for the secret in Secret Manager
 resource "google_secret_manager_secret" "secret" {
+  depends_on = [google_project_iam_member.sm_sa_pubsub_publisher]
   project   = var.project_id
   secret_id = var.secret_id
   labels    = var.labels
