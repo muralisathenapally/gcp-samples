@@ -23,3 +23,7 @@ variable "labels" {
 
 variable "rotation_details" {
 }
+
+variable "setup_secret_manager" {
+  
+}

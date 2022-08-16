@@ -7,4 +7,5 @@ module "secret_manager" {
   accessors        = each.value.secret_accessors
   replication      = each.value.replication
   rotation_details = each.value.rotation_details
+  setup_secret_manager = each.value.setup_secret_manager
 }

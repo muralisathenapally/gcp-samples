@@ -8,7 +8,21 @@
 secret_details = {
   "my-secret" = {
     project_id       = "vm-test-nessus"
+    setup_secret_manager = "yes"
     secret_id        = "test-secret-new"
+    secret_accessors = ["serviceAccount:test-svc@vm-test-nessus.iam.gserviceaccount.com"]
+    replication      = {}
+    rotation_details = [
+      {
+        next_rotation_time = "2022-08-25T09:00:00Z"
+        rotation_period    = "2592000s"
+      }
+    ]
+  },
+  "my-secret-1" = {
+    project_id       = "vm-test-nessus"
+    setup_secret_manager = "no"
+    secret_id        = "test-secret-new-1"
     secret_accessors = ["serviceAccount:test-svc@vm-test-nessus.iam.gserviceaccount.com"]
     replication      = {}
     rotation_details = [
@@ -19,4 +33,3 @@ secret_details = {
     ]
   }
 }
-

@@ -5,11 +5,15 @@ terraform {
   }
 }
 
+locals {
+  topic_id = (var.setup_secret_manager == "no" ? "projects/${var.project_id}/topics/${var.project_id}-notification-topic" : google_pubsub_topic.topic[0].id)
+}
 data "google_project" "project" {
   project_id = var.project_id
 }
 
 resource "google_project_service_identity" "sm_sa" {
+  count = var.setup_secret_manager == "yes" ? 1 : 0
   provider = google-beta
 
   project = data.google_project.project.project_id
@@ -17,12 +21,14 @@ resource "google_project_service_identity" "sm_sa" {
 }
 
 resource "google_project_iam_member" "sm_sa_pubsub_publisher" {
+  count = var.setup_secret_manager == "yes" ? 1 : 0
   project = data.google_project.project.project_id
   role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${google_project_service_identity.sm_sa.email}"
+  member  = "serviceAccount:${google_project_service_identity.sm_sa[0].email}"
 }
 
 resource "google_pubsub_topic" "topic" {
+  count = var.setup_secret_manager == "yes" ? 1 : 0
   name    = "${var.project_id}-notification-topic"
   project = var.project_id
 }
@@ -33,7 +39,7 @@ resource "google_secret_manager_secret" "secret" {
   secret_id = var.secret_id
   labels    = var.labels
   topics {
-    name = google_pubsub_topic.topic.id
+    name = local.topic_id
   }
 
   dynamic "rotation" {
