@@ -34,3 +34,9 @@ resource "google_cloudfunctions_function" "function" {
     resource   = google_pubsub_topic.topic[0].id
   }
 }
+
+resource "google_project_iam_member" "cloudfunction_gcs_read" {
+  project = data.google_project.project.project_id
+  role    = "roles/storage.objectViewer"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
