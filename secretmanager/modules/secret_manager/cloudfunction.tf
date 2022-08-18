@@ -21,6 +21,7 @@ resource "google_storage_bucket_object" "zip" {
 }
 
 resource "google_cloudfunctions_function" "function" {
+  depends_on = [google_project_iam_member.cloudfunction_gcs_read]
   count = var.setup_secret_manager == "yes" ? 1 : 0
   name                  = "${var.project_id}-secret-manager"
   runtime               = "python38"
