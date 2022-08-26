@@ -1,5 +1,5 @@
 1.create a secret called: alpha-vantage-key with password: 6GYDCLQH412N7XIK
-2.create rhel 7 server
+2.create rhel 8 server
 3.Login to server : 
   Upload app.py & requirements.txt
 4.run below commands :
@@ -13,4 +13,4 @@
 
 
 5. in your system:
-   run curl -X POST http://RHEL7_SERVERIP/api/v1/symbol?symbol=GOOG
+   run curl -X POST http://RHEL8_SERVERIP/api/v1/symbol?symbol=GOOG
