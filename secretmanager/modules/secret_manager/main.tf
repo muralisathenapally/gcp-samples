@@ -69,6 +69,7 @@ resource "google_secret_manager_secret" "secret" {
     }
     automatic = length(var.replication) > 0 ? null : true
   }
+  lifecycle { ignore_changes = [rotation]}
 }
 
 # Allow the supplied accounts to read the secret value from Secret Manager

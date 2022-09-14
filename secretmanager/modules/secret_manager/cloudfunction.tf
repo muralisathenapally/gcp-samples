@@ -34,6 +34,9 @@ resource "google_cloudfunctions_function" "function" {
     event_type = "google.pubsub.topic.publish"
     resource   = google_pubsub_topic.topic[0].id
   }
+  environment_variables = {	
+    PROJECT = var.project_id	
+  }
 }
 
 resource "google_project_iam_member" "cloudfunction_gcs_read" {
