@@ -6,6 +6,7 @@ import os
 
 from utils import ServiceAccountsClient
 from utils import add_secret_version
+from utils import delete_old_secret_versions
 
 project = os.environ.get('PROJECT')
 
@@ -29,6 +30,9 @@ def process_pubsub_event(event, context):
 
       #add new json key
       private_key = service_account_client.create_key(sa_name)
+
+      #delete old secret version
+      delete_old_secret_versions(project, sn)
 
       #add secret version
       add_secret_version(project, sn, private_key)

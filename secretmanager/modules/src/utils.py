@@ -38,3 +38,15 @@ def add_secret_version(project_id, secret_id, payload):
     )
 
     return response.name
+
+def delete_old_secret_versions(project_id, secret_id, filter_str="state:ENABLED"):
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Build the resource name of the parent secret.
+    parent = client.secret_path(project_id, secret_id)
+
+    # List all secret versions.
+    for version in client.list_secret_versions(request={"parent": parent, "filter": filter_str}):
+        response = client.destroy_secret_version(request={"name": version.name})
+        return response.name
