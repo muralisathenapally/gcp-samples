@@ -19,20 +19,20 @@ if [ $# -eq 0 ]
 fi
 
 #Create endpoint
-echo "... Creating IDS Endpoint: $ENDPOINT_NAME ..."
-gcloud ids endpoints create $ENDPOINT_NAME  --network=$VPC_NETWORK --zone=$ZONE  --severity=$SEVERITY --project=$PROJECT_ID --no-async
-if [ $? -eq 0 ]; then
-   echo "... IDS Endpoint: $ENDPOINT_NAME Created Successfully..."
-else
-   echo "Failed to create IDS Endpoint"
-   exit 1
-fi
+#echo "... Creating IDS Endpoint: $ENDPOINT_NAME ..."
+#gcloud ids endpoints create $ENDPOINT_NAME  --network=$VPC_NETWORK --zone=$ZONE  --severity=$SEVERITY --project=$PROJECT_ID --no-async
+#if [ $? -eq 0 ]; then
+#   echo "... IDS Endpoint: $ENDPOINT_NAME Created Successfully..."
+#else
+#   echo "Failed to create IDS Endpoint"
+#   exit 1
+#fi
 
 #Get endpointForwardingRule
 ENDPOINT_FORWARDING_RULE=$(gcloud ids endpoints describe $ENDPOINT_NAME --zone $ZONE --project $PROJECT_ID | grep "endpointForwardingRule" | awk '{ print $2 }')
 
 #Get subnets from the network
-SUBNETS=$(gcloud compute networks subnets list --network=$VPC_NETWORK --filter="region:( $REGION )" | grep NAME | awk '{print $2}' ORS=',')
+SUBNETS=$(gcloud compute networks subnets list --network=$VPC_NETWORK --filter="region:( $REGION )" | grep $REGION | awk '{print $1}' ORS=',')
 
 #Create packet mirroring policy
 echo "... Creating Packet Mirroring Policy: $POLICY_NAME ..."
