@@ -19,14 +19,14 @@ if [ $# -eq 0 ]
 fi
 
 #Create endpoint
-#echo "... Creating IDS Endpoint: $ENDPOINT_NAME ..."
-#gcloud ids endpoints create $ENDPOINT_NAME  --network=$VPC_NETWORK --zone=$ZONE  --severity=$SEVERITY --project=$PROJECT_ID --no-async
-#if [ $? -eq 0 ]; then
-#   echo "... IDS Endpoint: $ENDPOINT_NAME Created Successfully..."
-#else
-#   echo "Failed to create IDS Endpoint"
-#   exit 1
-#fi
+echo "... Creating IDS Endpoint: $ENDPOINT_NAME ..."
+gcloud ids endpoints create $ENDPOINT_NAME  --network=$VPC_NETWORK --zone=$ZONE  --severity=$SEVERITY --project=$PROJECT_ID --no-async
+if [ $? -eq 0 ]; then
+  echo "... IDS Endpoint: $ENDPOINT_NAME Created Successfully..."
+else
+  echo "Failed to create IDS Endpoint"
+  exit 1
+fi
 
 #Get endpointForwardingRule
 ENDPOINT_FORWARDING_RULE=$(gcloud ids endpoints describe $ENDPOINT_NAME --zone $ZONE --project $PROJECT_ID | grep "endpointForwardingRule" | awk '{ print $2 }')
@@ -58,4 +58,3 @@ else
    echo "Failed to create bq dataset"
    exit 1
 fi
-
