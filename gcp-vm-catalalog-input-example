@@ -1,0 +1,8 @@
+instance_name = "test-instance"
+machine_type  = "e2-medium"
+zone          = "us-east4-a"
+project_id    = "your-project-id"
+network_tags  = ["ssh", "rdp"]
+image         = "debian-cloud/debian-11"
+network       = "default"
+disk_size     = 50
