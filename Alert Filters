@@ -2,7 +2,8 @@
 VM Create/Delete
 ================
 
-protoPayload.methodName="beta.compute.instances.insert" OR protoPayload.methodName="compute.instances.insert" OR protoPayload.methodName="v1.compute.instances.insert" OR protoPayload.methodName="beta.compute.instances.delete" OR protoPayload.methodName="compute.instances.delete" OR protoPayload.methodName="v1.compute.instances.delete"
+protoPayload.methodName="beta.compute.instances.insert" OR protoPayload.methodName="compute.instances.insert" OR protoPayload.methodName="v1.compute.instances.insert" OR protoPayload.methodName="beta.compute.instances.delete" OR protoPayload.methodName="compute.instances.delete" OR protoPayload.methodName="v1.compute.instances.delete" OR 
+protoPayload.methodName="beta.compute.instances.stop" OR protoPayload.methodName="compute.instances.stop" OR protoPayload.methodName="v1.compute.instances.stop"
 
 
 FW Create/Delete
