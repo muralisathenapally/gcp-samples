@@ -1,0 +1,11 @@
+compute.organizations.administerXpn
+compute.firewallPolicies.addAssociation
+compute.firewallPolicies.copyRules
+compute.addresses.delete
+compute.addresses.create
+compute.addresses.list
+compute.addresses.get
+compute.addresses.setLabels
+compute.disks.get
+compute.disks.list
+ccompute.images.update
