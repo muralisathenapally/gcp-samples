@@ -1,0 +1,10 @@
+1. Supports creation of,
+     Project Iam custom role
+     Organization Iam custom role
+
+2. Can create 
+     custom role from base service level roles
+     custom role from given list of permissions
+
+3. Can assign created custom role to members(users, service account, groups)
+4. Can exclude given permissions from role
