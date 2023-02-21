@@ -1,0 +1,13 @@
+Project Owner
+==============
+Can :
+    Has full control over the project
+    Can create and delete vpc networks, firewall rules and other networking componenets
+    Can grant access to other members(user, service accounts, groups)
+    Can Create and delete any and all resources in the project
+    Can attach billing account to project given that access to billing is also present
+Cannot :
+    Delete the billing account
+    Create/modify/delete resources in other projects
+    
+
