@@ -6,3 +6,4 @@ variable "resources" {}
 variable "restricted_services" {}
 variable "ingress_policies" {}
 variable "egress_policies" {}
+variable "folder_id" {}
