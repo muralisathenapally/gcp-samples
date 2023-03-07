@@ -8,6 +8,7 @@ vpc_perimeter_details = {
     restricted_services = ["storage.googleapis.com"]
     ingress_policies    = []
     egress_policies     = []    
+    folder_id           = "give folder id"
   },
   "perimeter_2" = {
     org_id              = "organizations/123456789"
@@ -18,6 +19,7 @@ vpc_perimeter_details = {
     restricted_services = ["bigquery.googleapis.com"]
     ingress_policies    = []
     egress_policies     = []
+    folder_id           = "give folder id"
   }
 }
 
