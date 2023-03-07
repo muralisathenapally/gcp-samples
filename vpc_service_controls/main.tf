@@ -9,4 +9,5 @@ module "vpc_perimeter" {
   restricted_services = each.value.restricted_services
   ingress_policies    = each.value.ingress_policies
   egress_policies     = each.value.egress_policies
+  folder_id           = each.value.folder_id
 }
