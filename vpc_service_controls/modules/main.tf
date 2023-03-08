@@ -1,6 +1,6 @@
 resource "google_access_context_manager_access_policy" "access-policy" {
   parent = var.org_id
-  title  = "Scoped Access Policy"
+  title  = var.policy_name
   scopes = ["folders/${var.folder_id}"]
 }
 
