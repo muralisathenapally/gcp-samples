@@ -4,6 +4,13 @@
     description         = "storage vpc perimeter"
     resources           = ["united-lane-354904"]
     restricted_services = ["storage.googleapis.com"]
+    folder_id           = 2341245346
+
+    access_level_name   = "myaccess"
+    access_level_members = []
+    access_level_regions = []
+    access_level_ip_subnetworks = []
+
     ingress_policies    = [{
       "from" = {
         "sources" = {
@@ -44,5 +51,4 @@
        }
      }
    }
- }]    
-    folder_id           = 2341245346
+ }] 
