@@ -7,7 +7,7 @@
     folder_id           = 2341245346
 
     access_level_name   = "myaccess"
-    access_level_members = []
+    access_level_members = ["user:archer.murali@gmail.com"]
     access_level_regions = []
     access_level_ip_subnetworks = []
 
