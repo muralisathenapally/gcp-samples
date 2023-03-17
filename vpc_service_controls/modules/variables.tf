@@ -7,3 +7,7 @@ variable "restricted_services" {}
 variable "ingress_policies" {}
 variable "egress_policies" {}
 variable "folder_id" {}
+variable "access_level_name" {}
+variable "members" {}
+variable "regions" {}
+variable "ip_subnetworks" {}
