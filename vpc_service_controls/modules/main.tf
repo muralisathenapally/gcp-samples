@@ -21,6 +21,8 @@ module "regular_service_perimeter_1" {
   resources      = var.resources
 
   restricted_services = var.restricted_services
+  
+  access_levels       = [module.access_level.name]
 
   ingress_policies = var.ingress_policies
   egress_policies  = var.egress_policies
