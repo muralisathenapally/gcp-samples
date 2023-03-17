@@ -8,5 +8,11 @@ module "vpc_perimeter" {
   restricted_services = var.restricted_services
   ingress_policies    = var.ingress_policies
   egress_policies     = var.egress_policies
+  
+  access_level_name   = var.access_level_name
+  members = var.access_level_members
+  regions = var.access_level_regions
+  ip_subnetworks = var.access_level_ip_subnetworks
+  
   folder_id           = var.folder_id
 }
