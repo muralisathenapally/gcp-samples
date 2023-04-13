@@ -10,4 +10,8 @@ Cannot :
     Delete the billing account
     Create/modify/delete resources in other projects
     
+    
+==============
+    
+    | findstr "\w+@[\w-]+\.iam\.gserviceaccount\.com"
 
