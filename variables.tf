@@ -1,10 +1,10 @@
 variable "machine_type" {
-  type    = string
+  type        = string
   description = "Instance Type"
 }
 
 variable "zone" {
-  type    = string
+  type        = string
   description = "Instance Zone"
 }
 

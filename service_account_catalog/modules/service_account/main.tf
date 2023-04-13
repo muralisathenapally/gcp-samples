@@ -4,9 +4,9 @@ locals {
 
 resource "google_project_iam_member" "project" {
   for_each = { for r in var.roles : r => r if contains(local.allowed_roles_set, r) }
-  project  = var.project_id
-  role     = each.value
-  member   = "serviceAccount:${google_service_account.service_accounts.email}"
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.service_accounts.email}"
 }
 
 resource "google_service_account" "service_accounts" {

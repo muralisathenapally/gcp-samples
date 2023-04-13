@@ -1,5 +1,5 @@
 variable "account_id" {
-  type        = string
+      type        = string
   description = "The account id that is used to generate the service account email address"
 }
 
@@ -20,13 +20,7 @@ variable "project_id" {
   description = "Project id where service account will be created."
 }
 
-variable "allowed_roles" {
-  type        = list(string)
-  description = "These are the only allowed roles"
-  default     = ["roles/editor", "roles/viewer", "roles/compute.admin"]
-}
-
 variable "roles" {
-  type        = list(string)
+  type = list(string)
   description = "Roles to be attached to service account after creation. Any roles other than the allowed_roles are ignored"
 }
