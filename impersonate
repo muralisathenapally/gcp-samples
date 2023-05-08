@@ -1,0 +1,13 @@
+resource "google_iam_deny_policy" "example" {
+  provider = google-beta
+  parent   = urlencode("cloudresourcemanager.googleapis.com/projects/united-lane-354904")
+  name     = "my-deny-policy"
+  display_name = "A deny rule"
+  rules {
+    description = "First rule"
+    deny_rule {
+      denied_principals = ["principalSet://goog/public:all"]
+      denied_permissions = ["storage.googleapis.com/buckets.create"]
+    }
+  }
+}
