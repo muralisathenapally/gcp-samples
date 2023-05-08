@@ -7,7 +7,7 @@ resource "google_iam_deny_policy" "example" {
     description = "First rule"
     deny_rule {
       denied_principals = ["principalSet://goog/public:all"]
-      denied_permissions = ["storage.googleapis.com/buckets.create"]
+      denied_permissions = ["cloudresourcemanager.googleapis.com/projects.delete"]
     }
   }
 }
