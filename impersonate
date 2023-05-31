@@ -16,4 +16,4 @@ resource "google_iam_deny_policy" "example" {
 
 gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/ugcslab-ssb-dev1 --kind=denypolicies --format=json
 
-gcloud iam policies delete my-deny-policy  --attachment-point=cloudresourcemanager.googleapis.com/projects/ugcslab-ssb-dev1  --kind=denypolicies
+gcloud beta iam policies delete my-deny-policy  --attachment-point=cloudresourcemanager.googleapis.com/projects/ugcslab-ssb-dev1  --kind=denypolicies
