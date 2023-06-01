@@ -33,10 +33,10 @@ This module expects 2 inputs,
 1. project id on which to create the deny policy
 2. name of the deny policy
 
-These deny policies cant be seen from console. Below command can list them,
+These deny policies cant be seen from console. One of below commands can list them,
 
 gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/YOUR_PROJECT_ID --kind=denypolicies --format=json
 
-or 
+(or) 
 
 gcloud beta iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/YOUR_PROJECT_ID --kind=denypolicies --format=json
