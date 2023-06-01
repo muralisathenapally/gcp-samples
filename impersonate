@@ -36,3 +36,7 @@ This module expects 2 inputs,
 These deny policies cant be seen from console. Below command can list them,
 
 gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/YOUR_PROJECT_ID --kind=denypolicies --format=json
+
+or 
+
+gcloud beta iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/YOUR_PROJECT_ID --kind=denypolicies --format=json
