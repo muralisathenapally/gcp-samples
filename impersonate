@@ -14,6 +14,25 @@ resource "google_iam_deny_policy" "example" {
 
 
 
-gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/ugcslab-ssb-dev1 --kind=denypolicies --format=json
+gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/PROJECTID --kind=denypolicies --format=json
 
-gcloud beta iam policies delete my-deny-policy  --attachment-point=cloudresourcemanager.googleapis.com/projects/ugcslab-ssb-dev1  --kind=denypolicies
+gcloud beta iam policies delete my-deny-policy  --attachment-point=cloudresourcemanager.googleapis.com/projects/PROJECTID  --kind=denypolicies
+
+
+
+
+READme
+======
+
+Identity and Access Management (IAM) deny policies let you set guardrails on access to Google Cloud resources. With deny policies, you can define deny rules that prevent certain principals from using certain permissions, regardless of the roles they're granted.
+This code blocks all types of members(users/groups/service accounts) from impersonating service accounts even if they have required IAM roles.
+
+Inputs:
+
+This module expects 2 inputs, 
+1. project id on which to create the deny policy
+2. name of the deny policy
+
+These deny policies cant be seen from console. Below command can list them,
+
+gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/YOUR_PROJECT_ID --kind=denypolicies --format=json
