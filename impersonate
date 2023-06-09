@@ -40,3 +40,7 @@ gcloud iam policies list --attachment-point=cloudresourcemanager.googleapis.com/
 (or) 
 
 gcloud beta iam policies list --attachment-point=cloudresourcemanager.googleapis.com/projects/YOUR_PROJECT_ID --kind=denypolicies --format=json
+
+
+
+gcloud compute instances list --project PROJECT-ID--impersonate-service-account=service-account-email-to-impersonate
