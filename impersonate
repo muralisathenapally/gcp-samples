@@ -55,11 +55,6 @@ gcloud compute instances list --project PROJECT-ID --impersonate-service-account
 
 
 ============
-filter = "logName:\"logs/cloudaudit.googleapis.com\" OR (resource.type \"gce subnetwork\" AND logName: \"logs/compute.goc
 
 
-OR (resource.type=\"gce_subnetwork\" AND logName: \"logs/compute.googleapis.com%2FvpC flows\
-
-resource.type="gce_subnetwork"
-logName="projects/PROJECT_ID/logs/compute.googleapis.com%2Ffirewall"
-jsonPayload.instance.vm_name="INSTANCE_ID"
+OR (resource.type=\"gce_subnetwork\" AND logName: \"logs/compute.googleapis.com%2Ffirewall\") OR resource.type=\"vpn_gateway\""
