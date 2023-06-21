@@ -58,3 +58,11 @@ gcloud compute instances list --project PROJECT-ID --impersonate-service-account
 
 
 OR (resource.type=\"gce_subnetwork\" AND logName: \"logs/compute.googleapis.com%2Ffirewall\") OR resource.type=\"vpn_gateway\""
+
+
+
+
+
+
+
+resource.type=gce_subnetwork AND logName: "logs/compute.googleapis.com%2Ffirewall"
