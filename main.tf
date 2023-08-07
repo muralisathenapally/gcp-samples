@@ -122,7 +122,7 @@ resource "null_resource" "ack-docker-image" {
     command = "sed -i \"s,REPLACE_TABLE,${var.ackstable},g\" ./AckCloudRun/Dockerfile"
   }
   provisioner "local-exec" {
-    command = "gcloud builds submit --region=${var.region} --config ack-cloudrun-build.yaml ./AckCloudRun --substitutions=_REPOSITORY=${google_artifact_registry_repository.my_docker_repo_1.name},_DOCKER_IMG=${var.ack_docker_image}"
+    command = "gcloud builds submit --region=${var.region} --config ack-cloudrun-build.yaml ./AckCloudRun --substitutions=_REPOSITORY=${google_artifact_registry_repository.my_docker_repo_1.name},_DOCKER_IMG=${var.ack_docker_image},_PROJECTID=${var.project}"
   }
 }
 
@@ -142,7 +142,7 @@ resource "null_resource" "cai-docker-image" {
     command = "sed -i \"s,REPLACE_TABLE,${var.ackstable},g\" ./CaiCloudRun/Dockerfile"
   }
   provisioner "local-exec" {
-    command = "gcloud builds submit --region=${var.region} --config cai-cloudrun-build.yaml ./CaiCloudRun --substitutions=_REPOSITORY=${google_artifact_registry_repository.my_docker_repo.name},_DOCKER_IMG=${var.cai_docker_image}"
+    command = "gcloud builds submit --region=${var.region} --config cai-cloudrun-build.yaml ./CaiCloudRun --substitutions=_REPOSITORY=${google_artifact_registry_repository.my_docker_repo.name},_DOCKER_IMG=${var.cai_docker_image},_PROJECTID=${var.project}"
   }
 
   lifecycle {
