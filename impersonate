@@ -66,3 +66,18 @@ OR (resource.type=\"gce_subnetwork\" AND logName: \"logs/compute.googleapis.com%
 
 
 resource.type=gce_subnetwork AND logName: "logs/compute.googleapis.com%2Ffirewall"
+
+
+
+
+
+
+
+===========================
+
+
+
+notificationtype = asset_type.split('.')[0]
+print("asset_type:", asset_type)
+
+insert_stmt = f"INSERT `{project}.{dataset}.{table}` (data, uuid, creationtimestamp, notifiedtimestamp, notificationtype) VALUES( '{original_asset_data_encoded}', '{guidstr}', '{created_ts}', CURRENT_TIMESTAMP(), '{notificationtype.upper()}');"
