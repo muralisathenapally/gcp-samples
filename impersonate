@@ -90,3 +90,4 @@ if "iam" in asset_type:
     else:
         notificationtype = "RESOURCES & SERVICES"
 
+https://go.microsoft.com/fwlink/?linkid=2139369
