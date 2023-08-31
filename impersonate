@@ -91,3 +91,26 @@ if "iam" in asset_type:
         notificationtype = "RESOURCES & SERVICES"
 
 https://go.microsoft.com/fwlink/?linkid=2139369
+=================
+
+
+vi /etc/google/snapshots/pre.sh
+
+#!/bin/bash
+sudo fsfreeze -f [example-disk-location]
+
+
+vi /etc/google/snapshots/post.sh
+
+#!/bin/bash
+sudo fsfreeze -u [example-disk-location]
+
+
+
+vi /etc/default/instance_configs.cfg
+
+[Snapshots]
+enabled = true
+timeout_in_seconds = 120
+
+sudo systemctl restart google-guest-agent.service
