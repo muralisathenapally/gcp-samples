@@ -97,14 +97,13 @@ https://go.microsoft.com/fwlink/?linkid=2139369
 vi /etc/google/snapshots/pre.sh
 
 #!/bin/bash
-sudo fsfreeze -f [example-disk-location]
+sudo fsfreeze -f /
 
 
 vi /etc/google/snapshots/post.sh
 
 #!/bin/bash
-sudo fsfreeze -u [example-disk-location]
-
+sudo fsfreeze -u /
 
 
 vi /etc/default/instance_configs.cfg
