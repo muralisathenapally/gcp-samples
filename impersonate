@@ -130,4 +130,9 @@ https://cloud.google.com/compute/docs/connect/add-ssh-keys#console_2
 
 gcloud compute os-config os-policy-assignment-reports list --location=us-west1-a
 
-https://cloud.google.com/sdk/docs/install#linux
+
+1. Install Gcloud sdk by following below instructions,
+    https://cloud.google.com/sdk/docs/install#linux
+2. after installation, run gcloud auth login and authenticate with your email
+3. run below ssh command to login to vm,
+    
