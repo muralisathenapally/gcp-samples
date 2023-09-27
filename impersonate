@@ -126,3 +126,6 @@ ssh-keygen -t rsa -f C:\Users\dkorwar-etc\.ssh\nessus -C nessus -b 2048
 
 
 https://cloud.google.com/compute/docs/connect/add-ssh-keys#console_2
+
+
+gcloud compute os-config os-policy-assignment-reports list --location=us-west1-a
