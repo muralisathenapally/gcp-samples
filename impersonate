@@ -129,3 +129,5 @@ https://cloud.google.com/compute/docs/connect/add-ssh-keys#console_2
 
 
 gcloud compute os-config os-policy-assignment-reports list --location=us-west1-a
+
+https://cloud.google.com/sdk/docs/install#linux
