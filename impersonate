@@ -113,3 +113,13 @@ enabled = true
 timeout_in_seconds = 120
 
 sudo systemctl restart google-guest-agent.service
+
+
+
+
+
+
+
+
+
+ssh-keygen -t rsa -f C:\Users\dkorwar-etc\.ssh\nessus -C nessus -b 2048
