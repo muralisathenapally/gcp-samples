@@ -157,3 +157,12 @@ resource "google_pubsub_subscription" "example" {
     ttl = ""
   }
 }
+
+
+
+
+
+
+
+
+gcloud services list --enabled --project=PROJECTID --format="value(TITLE)"
