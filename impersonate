@@ -159,7 +159,7 @@ resource "google_pubsub_subscription" "example" {
 }
 
 
-
+https://cloud.google.com/bigquery/docs/visualize-looker-studio
 
 
 
