@@ -191,3 +191,7 @@ gcloud resource-manager org-policies allow --organization SRC_ORG_ID resourceman
 
 Dest:
 gcloud resource-manager org-policies allow --organization DST_ORG_ID resourcemanager.allowedImportSources "under:organizations/SRC_ORG_ID"
+
+
+
+gcloud alpha resource-manager liens create --project=PROJECT_ID
