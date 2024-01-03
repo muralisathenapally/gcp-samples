@@ -190,4 +190,4 @@ Source:
 gcloud resource-manager org-policies allow --organization SRC_ORG_ID resourcemanager.allowedExportDestinations "under:organizations/DST_ORG_ID"
 
 Dest:
-gcloud resource-manager org-policies allow --organization DST_ORG_ID resourcemanager.allowedImportSource "under:organizations/SRC_ORG_ID"
+gcloud resource-manager org-policies allow --organization DST_ORG_ID resourcemanager.allowedImportSources "under:organizations/SRC_ORG_ID"
