@@ -183,3 +183,11 @@ constraints/resourcemanager.allowedExportDestinations
 
 Destination org:
 constraints/resourcemanager.allowedImportSources
+
+
+
+Source:
+gcloud resource-manager org-policies allow --organization SRC_ORG_ID resourcemanager.allowedExportDestinations "under:organizations/DST_ORG_ID"
+
+Dest:
+gcloud resource-manager org-policies allow --organization DST_ORG_ID resourcemanager.allowedImportSource "under:organizations/SRC_ORG_ID"
