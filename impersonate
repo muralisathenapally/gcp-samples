@@ -194,4 +194,4 @@ gcloud resource-manager org-policies allow --organization DST_ORG_ID resourceman
 
 
 
-gcloud alpha resource-manager liens create --project=PROJECT_ID
+gcloud alpha resource-manager liens create --project YOUR_PROJECT_ID --reason test --restrictions=resourcemanager.projects.delete
