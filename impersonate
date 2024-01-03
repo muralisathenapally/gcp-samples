@@ -174,3 +174,12 @@ gcloud services list --enabled --project=PROJECTID --format="value(TITLE)"
 
 
 gcloud compute instances add-tags INSTANCE_NAME --project PROJECT_ID --zone us-east4-b --tags foobar
+
+
+
+
+Source Org:
+constraints/resourcemanager.allowedExportDestinations
+
+Destination org:
+constraints/resourcemanager.allowedImportSources
