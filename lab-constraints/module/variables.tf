@@ -1,5 +1,5 @@
-variable "target_ids" {
-  type        = list
+variable "target_id" {
+  type        = string
   description = "Variable for project or folder or organization ID."
 }
 
