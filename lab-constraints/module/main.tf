@@ -66,3 +66,26 @@ resource "google_organization_policy" "org_disable_default_network" {
     enforced = true
   }
 }
+
+
+resource "google_project_organization_policy" "project_policy_list_exclude_projects" {
+  for_each = toset(var.exclude_projects_block_vm_external_ip)
+
+  project    = each.value
+  constraint = "constraints/compute.vmExternalIpAccess"
+
+  restore_policy {
+    default = true
+  }
+}
+
+resource "google_project_organization_policy" "project_policy_list_exclude_projects_1" {
+  for_each = toset(var.exclude_projects_skip_default_network_creation)
+
+  project    = each.value
+  constraint = "constraints/compute.skipDefaultNetworkCreation"
+
+  restore_policy {
+    default = true
+  }
+}
