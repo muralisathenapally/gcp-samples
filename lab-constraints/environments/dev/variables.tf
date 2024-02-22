@@ -18,3 +18,7 @@ variable "exclude_projects_block_vm_external_ip" {
   description = "project ids to be excluded from block external ip for vm policy"
   default     = []
 }
+
+variable "allowed_external_ip_vms" {
+  default = {}
+}
