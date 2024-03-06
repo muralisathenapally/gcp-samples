@@ -201,3 +201,10 @@ https://arraythis.com/
 
 
 gcloud beta resource-config bulk-export --project=PID --resource-format=terraform > PID.tf
+
+
+
+
+
+
+https://docs.venafi.com/Docs/22.1/TopNav/Content/Install/fm-install-preface-tpp.php?tocpath=Platform%7CInstallation%20and%20Upgrade%20Guide%7C_____0
