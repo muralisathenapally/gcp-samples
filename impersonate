@@ -213,3 +213,7 @@ https://docs.venafi.com/Docs/22.1/TopNav/Content/Install/fm-install-preface-tpp.
 
 curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
 sudo bash add-google-cloud-ops-agent-repo.sh --also-install
+
+
+
+sudo systemctl status google-cloud-ops-agent"*"
