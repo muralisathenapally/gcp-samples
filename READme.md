@@ -22,6 +22,9 @@ receivers: [nessus-agent_log]
 
 receivers: [nessus-scanner_log]
 
+
+sudo systemctl restart google-cloud-ops-agent"*"
+sudo systemctl status google-cloud-ops-agent"*"
       
 
       
