@@ -16,7 +16,7 @@ receivers: [nessus-agent_log]
     nessus-scanner_log:
       type: files
       include_paths:
-      - /opt/nessus_agent/var/nessus/logs/*
+      - /opt/nessus/var/nessus/logs/*
 
 receivers: [nessus-scanner_log]
 
