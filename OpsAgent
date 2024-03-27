@@ -1,0 +1,31 @@
+1. Ops Agent Setup
+Ops Agent sends logs and metrics to cloud logging service. to install the agent run below commands,
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install
+After both of the above commands are succeeded, run below command to check status of the agent
+sudo systemctl status google-cloud-ops-agent"*"
+Ref: https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/installation
+2. Application Log Configuration
+Ops agent configuration is located at /etc/google-cloud-ops-agent/config.yaml. Modify it to include application logs. For ex: nessus-scanner, you add below config to the config.yaml under logging receivers section
+nessus-scanner_log:
+  type: files
+  include_paths:
+  - /opt/nessus/var/nessus/logs/*
+Under service receivers section, add [nessus-scanner_log]
+ADD CONFIG.YAML PHOTO HERE
+3. Verify data in Cloud Logging
+Goto cloud logging service in gcp. Under resource, select vm instance and you should see the log name nessus-scanner_log. Which is the name we gave in the above step. Application Logs should be visible here, if not check the agent config
+ADD GCP LOGS PHOTO HERE
+4. Create log based metric
+After the data is visible in logs, create a log based metric from the logs, here’s an example metric filter,
+ADD THE FILTER HERE
+ADD LOGMETRIC PHOTO HERE
+5. Check metric data in Prometheus
+Once the log metric is created, give it a few hours to get the data populated in prometheus. To check if the metric is visible in prometheus, goto prometheus webpage and search for the metric
+ADD PROMETHEUS URL HERE
+ADD PHOTO SHOWING METRIC IN PROMETHEUS
+6. Create Dashboard in grafana
+Goto grafana application using below url
+ADD GRAFANA URL HERE
+Goto Dashboards and UGCS Critical Systems dashboard, add a graph there.
+EDIT NESSUS SCANNER DASHBOARD AND ADD THAT PHOTO HERE
