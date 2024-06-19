@@ -1,9 +1,9 @@
-terraform init
+C:\Users\dkorwar-etc\Downloads\terraform init
 
-terraform import google_cloud_identity_group.group groups/GROUP_ID   
+C:\Users\dkorwar-etc\Downloads\terraform import google_cloud_identity_group.group groups/GROUP_ID   
 
 #you can get GROUP_ID from gcp console
 
-terraform plan
+C:\Users\dkorwar-etc\Downloads\terraform plan
 
-terraform apply
+C:\Users\dkorwar-etc\Downloads\terraform apply
