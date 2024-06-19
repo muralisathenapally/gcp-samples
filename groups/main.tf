@@ -5,4 +5,7 @@ resource "google_cloud_identity_group" "group" {
   parent = "customers/example.com"
   display_name = "Example Group"
   description  = "This is an example group."
+  labels = {
+    "cloudidentity.googleapis.com/groups.discussion_forum" = ""
+  }
 }
