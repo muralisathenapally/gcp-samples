@@ -24,10 +24,10 @@ exclude_projects_skip_default_network_creation = []
 
 ### Allow specified VMs to have public ip ###
 allowed_external_ip_vms = {
-  "psyched-circuit-405312" = {
-    vm_list = ["projects/psyched-circuit-405312/zones/us-east4-c/instances/test-intance"]
+  "psyched-circuit-405312" = {   ## project that has the vm to allow public ip
+    vm_list = ["projects/psyched-circuit-405312/zones/us-east4-c/instances/test-intance"] ## list of vm's to allow public ip
   },
-  "united-lane-354904" = {
-    vm_list = ["projects/united-lane-354904/zones/us-east4-c/instances/my-vm"]
+  "united-lane-354904" = { ## project that has the vm to allow public ip
+    vm_list = ["projects/united-lane-354904/zones/us-east4-c/instances/my-vm"] ## list of vm's to allow public ip
   }
 }
