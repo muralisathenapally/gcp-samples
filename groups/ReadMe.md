@@ -10,3 +10,6 @@ terraform apply
 
 
 gcloud auth application-default login --scopes=https://www.googleapis.com/auth/admin.directory.group,https://www.googleapis.com/auth/admin.directory.group.readonly
+
+
+gcloud alpha identity groups config export --all --resource-format=terraform
