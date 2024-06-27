@@ -7,3 +7,6 @@ terraform import google_cloud_identity_group.group groups/GROUP_ID
 terraform plan
 
 terraform apply
+
+
+gcloud auth application-default login --scopes=https://www.googleapis.com/auth/admin.directory.group,https://www.googleapis.com/auth/admin.directory.group.readonly
