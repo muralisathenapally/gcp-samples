@@ -1,10 +1,10 @@
 steps:
 - id: 'setup cred'
-  name: 'hashicorp/terraform'
+  name: 'alpine'
   entrypoint: sh
   args:
   - -c
-  -  echo $$SA > modules/key.json && ls modules/
+  - echo $$SA > $_REPO_PARENT_DIR/key.json && ls $_REPO_PARENT_DIR
   secretEnv: ['SA']
   
 - id: 'tf init'
@@ -12,21 +12,21 @@ steps:
   entrypoint: 'sh'
   args: 
   - '-c'
-  - cd modules && terraform init
+  - cd $_REPO_PARENT_DIR && terraform init
 
 - id: 'tf plan'
   name: 'hashicorp/terraform'
   entrypoint: 'sh'
   args: 
   - '-c'
-  - cd modules && terraform plan
+  - cd $_REPO_PARENT_DIR && terraform plan
 
 - id: 'tf apply'
   name: 'hashicorp/terraform'
   entrypoint: 'sh'
   args: 
   - '-c'
-  - cd modules && terraform apply --auto-approve
+  - cd $_REPO_PARENT_DIR && terraform apply --auto-approve
 
 availableSecrets:
   secretManager:
