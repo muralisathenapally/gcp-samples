@@ -1,6 +1,7 @@
 steps:
-- name: gcr.io/cloud-builders/gcloud
-  entrypoint: bash
+- id: 'setup cred'
+  name: 'hashicorp/terraform'
+  entrypoint: sh
   args:
   - -c
   -  echo $$SA > modules/key.json && ls modules/
