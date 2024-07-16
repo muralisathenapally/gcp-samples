@@ -13,14 +13,14 @@ steps:
   - '-c'
   - cd modules && terraform init
 
-- id: 'tf init'
+- id: 'tf plan'
   name: 'hashicorp/terraform'
   entrypoint: 'sh'
   args: 
   - '-c'
   - cd modules && terraform plan
 
-- id: 'tf init'
+- id: 'tf apply'
   name: 'hashicorp/terraform'
   entrypoint: 'sh'
   args: 
