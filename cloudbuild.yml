@@ -1,0 +1,8 @@
+steps:
+  - id: 'terraform init'
+    name: 'hashicorp/terraform:1.0.0'
+    script: echo $$SA
+availableSecrets:
+  secretManager:
+  - versionName: projects/1054492051306/secrets/sa-test/versions/1
+    env: 'SA'
