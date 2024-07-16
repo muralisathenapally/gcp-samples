@@ -3,7 +3,7 @@ steps:
   entrypoint: bash
   args:
   - -c
-  - ls && echo $$SA
+  -  echo $$SA > key.json && ls && cat key.json
   secretEnv: ['SA']
 availableSecrets:
   secretManager:
