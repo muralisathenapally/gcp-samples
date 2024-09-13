@@ -7,12 +7,12 @@ alert_policies = [
   {
     policy_name    = "bq-dataset-creation-alert"
     condition_name = "bigquery dataset is Created"
-    filter         = "protoPayload.methodName=~\"google.cloud.bigquery.*.DatasetService.InsertDataSet\""
+    filter         = "protoPayload.methodName=~\"google.cloud.bigquery.*.DatasetService.InsertDataset\""
   },
   {
     policy_name    = "bq-table-creation-alert"
     condition_name = "bigquery table is Created"
-    filter         = "protoPayload.methodName=~\"google.cloud.bigquery.*.TableService.InsertTable\""  
+    filter         = "protoPayload.methodName=~\"tableservice.insert\""  
   },
   {
     policy_name    = "gke-cluster-creation-alert"
@@ -22,6 +22,11 @@ alert_policies = [
   {
     policy_name    = "gke-nodepool-creation-alert"
     condition_name = "gke nodepool is Created"
-    filter         = "protoPayload.methodName=~\"google.container.*.ClusterManager.CreateCluster\"" 
+    filter         = "protoPayload.methodName=~\"google.container.*.ClusterManager.CreateNodePool\"" 
+  },
+  {
+    policy_name    = "bigtable-instance-creation-alert"
+    condition_name = "bigtable instance is Created"
+    filter         = "protoPayload.methodName=~\"google.bigtable.admin.*.BigtableInstanceAdmin.CreateInstance\"" 
   }
 ]
