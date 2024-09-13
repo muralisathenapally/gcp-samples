@@ -5,19 +5,23 @@ notification_channels = {
 
 alert_policies = [
   {
-    policy_name    = "vm-creation-alert"
-    condition_name = "VM Instance Created"
-    filter         = "protoPayload.methodName=\"beta.compute.instances.insert\" OR protoPayload.methodName=\"compute.instances.insert\" OR protoPayload.methodName=\"v1.compute.instances.insert\""
-
+    policy_name    = "bq-dataset-creation-alert"
+    condition_name = "bigquery dataset is Created"
+    filter         = "protoPayload.methodName=~\"google.cloud.bigquery.*.DatasetService.InsertDataSet\""
   },
   {
-    policy_name    = "vpc-creation-alert"
-    condition_name = "VPC/Subnets Created"
-    filter         = "protoPayload.methodName=\"beta.compute.networks.insert\" OR protoPayload.methodName=\"compute.networks.insert\" OR protoPayload.methodName=\"v1.compute.networks.insert\""
+    policy_name    = "bq-table-creation-alert"
+    condition_name = "bigquery table is Created"
+    filter         = "protoPayload.methodName=~\"google.cloud.bigquery.*.TableService.InsertTable\""  
   },
   {
-    policy_name    = "firewall-creation-alert"
-    condition_name = "Firewall Rule Created"
-    filter         = "protoPayload.methodName=\"beta.compute.firewalls.insert\" OR protoPayload.methodName=\"compute.firewalls.insert\" OR protoPayload.methodName=\"v1.compute.firewalls.insert\""
+    policy_name    = "gke-cluster-creation-alert"
+    condition_name = "gke cluster is Created"
+    filter         = "protoPayload.methodName=~\"google.container.*.ClusterManager.CreateCluster\"" 
+  },
+  {
+    policy_name    = "gke-nodepool-creation-alert"
+    condition_name = "gke nodepool is Created"
+    filter         = "protoPayload.methodName=~\"google.container.*.ClusterManager.CreateCluster\"" 
   }
 ]
