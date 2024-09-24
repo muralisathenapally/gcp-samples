@@ -1,0 +1,30 @@
+resource "google_cloud_asset_folder_feed" "folder_feed" {
+  billing_project      = var.project
+  folder       = var.folder_id
+  feed_id      = "caifeed-${google_pubsub_topic.cai-project-default.name}"
+  content_type = "RESOURCE"
+
+  asset_types = [
+    ".*.googleapis.com.*",
+  ]
+
+  feed_output_config {
+    pubsub_destination {
+      topic = "projects/${var.project}/topics/${google_pubsub_topic.cai-project-default.name}"
+    }
+  }
+
+  condition {
+    expression  = <<-EOT
+    temporal_asset.deleted ||
+    temporal_asset.prior_asset_state == google.cloud.asset.v1.TemporalAsset.PriorAssetState.DOES_NOT_EXIST
+    EOT
+    title       = "critical events filter"
+    description = "Send notifications on critical events for all resources"
+  }
+}
+
+variable "folder_id" {}
+
+
+folder_id = "123456"
