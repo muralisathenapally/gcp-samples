@@ -13,7 +13,6 @@ date = datetime.datetime.now()
 print("Time now is ", date)
 
 from flask import Flask, request
-#from pydantic import BaseModel
 from google.cloud import bigquery
 from google.cloud import resourcemanager_v3
 import json
