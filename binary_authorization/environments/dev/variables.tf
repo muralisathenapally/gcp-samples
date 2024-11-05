@@ -1,0 +1,3 @@
+variable "binary_autorization" {
+
+}
