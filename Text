@@ -1,0 +1,46 @@
+Integrating Binary Authorization into your Cloud Run deployment process adds an extra layer of security by ensuring that only trusted images are deployed. Here’s how you can do it:
+
+### Steps to Integrate Binary Authorization with Cloud Run
+
+1. **Enable Binary Authorization in Your Project**
+   - Go to the Google Cloud Console.
+   - Navigate to the **Binary Authorization** page.
+   - Enable Binary Authorization for your project.
+
+2. **Create Attestation Policies**
+   - Set up attestation policies to define which container images can be deployed. These can include specific image signatures, vulnerability assessments, or other criteria.
+   - Use the following command to create an attestation policy:
+     ```bash
+     gcloud beta binary-authorization policy set-policy \
+         --policy-file=policy.yaml
+     ```
+   - The `policy.yaml` file should include your rules and constraints, such as allowing only signed images.
+
+3. **Sign Your Container Images**
+   - When you build your container images, sign them using a signing key. You can use tools like `cosign` or Google Cloud's built-in signing capabilities.
+   - Example using `cosign`:
+     ```bash
+     cosign sign --key=<your-signing-key> <image>
+     ```
+
+4. **Deploy to Cloud Run with Binary Authorization**
+   - Ensure your Cloud Run service is configured to enforce Binary Authorization. You can set this through the Cloud Console or via the command line:
+     ```bash
+     gcloud run deploy <service-name> \
+         --image <image> \
+         --platform managed \
+         --allow-unauthenticated \
+         --binary-authorization
+     ```
+   - This will enforce the attestation policies you have defined.
+
+5. **Test Your Deployment**
+   - Verify that your deployment process adheres to the Binary Authorization policies:
+     - Attempt to deploy an unsigned image to see if it gets blocked.
+     - Deploy a signed image to ensure it proceeds as expected.
+
+6. **Monitor Policy Violations**
+   - Regularly monitor the Binary Authorization page in the Google Cloud Console to check for any policy violations or issues with your deployments.
+
+### Additional Recommendations
+- **Use CI/CD Pipelines:** Integrate the signing of container images and deployment to Cloud Run within your CI/CD pipelines for automation. Most CI/CD tools like GitHub Actions, GitLab CI, or Cloud Build can be set up to handle these workflows.
