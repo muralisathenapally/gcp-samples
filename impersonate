@@ -220,3 +220,6 @@ sudo systemctl status google-cloud-ops-agent"*"
 
 
 https://support.google.com/a/answer/1047213?hl=en
+
+https://cloud.google.com/iam/docs/troubleshooting-workload-identity-federation#error-connecting-issuer
+
