@@ -6,8 +6,8 @@ notification_channel_emails = [
 
 projects = [
   {
-    project_id             = "psyched-circuit-405312"
-    billing_account_id     = "01B7A9-D05367-9489AF"
+    project_id             = "project-id"
+    billing_account_id     = "billing-account-id"
     budget_display_name    = "Project 1 Budget"
     credit_types_treatment = "EXCLUDE_ALL_CREDITS"
     threshold_percentages  = [0.7, 0.8, 0.9]
