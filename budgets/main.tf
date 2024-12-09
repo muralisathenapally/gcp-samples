@@ -1,13 +1,23 @@
 data "google_project" "project" {
   for_each = { for project in var.projects : project.project_id => project }
 
-  project_id = each.key
+  project_id = each.value.project_id
+}
+
+resource "google_monitoring_notification_channel" "notification_channels" {
+  for_each = toset(var.notification_channel_emails)
+
+  type         = "email"
+  display_name = "Budget Alert Notification for ${each.value}"
+  labels = {
+    email_address = each.value
+  }
 }
 
 resource "google_billing_budget" "budget" {
   for_each = { for project in var.projects : project.project_id => project }
 
-  billing_account = data.google_billing_account.account.id
+  billing_account = each.value.billing_account_id
   display_name    = each.value.budget_display_name
 
   budget_filter {
@@ -29,13 +39,8 @@ resource "google_billing_budget" "budget" {
 
   all_updates_rule {
     monitoring_notification_channels = [
-      google_monitoring_notification_channel.notification_channel.id,
+      for nc in google_monitoring_notification_channel.notification_channels : nc.id
     ]
     disable_default_iam_recipients = true
   }
 }
-
-
-
-
-
