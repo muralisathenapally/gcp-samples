@@ -5,6 +5,7 @@ data "google_project" "project" {
 }
 
 resource "google_monitoring_notification_channel" "notification_channels" {
+  project = var.project_id
   for_each = toset(var.notification_channel_emails)
 
   type         = "email"
