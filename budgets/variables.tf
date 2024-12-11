@@ -12,3 +12,5 @@ variable "projects" {
 variable "notification_channel_emails" {
   type = list(string)
 }
+
+variable "project_id" {}
