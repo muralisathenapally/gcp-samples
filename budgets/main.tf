@@ -27,7 +27,10 @@ resource "google_billing_budget" "budget" {
   }
 
   amount {
-    last_period_amount = true
+    specified_amount {
+      currency_code = "USD"
+      units         = each.value.budget_amount
+    }
   }
 
   dynamic "threshold_rules" {
