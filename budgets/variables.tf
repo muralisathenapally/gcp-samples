@@ -6,6 +6,7 @@ variable "projects" {
     budget_display_name    = string
     credit_types_treatment = string
     threshold_percentages  = list(number)
+    budget_amount          = string
   }))
 }
 
