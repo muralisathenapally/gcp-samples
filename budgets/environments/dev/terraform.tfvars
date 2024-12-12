@@ -1,6 +1,6 @@
 projects = [
   {
-    project_id             = "project_id"
+    project_id             = "your-project_id"
     billing_account_id     = "billing_account_id"
     budget_display_name    = "Project 1 Budget"
     credit_types_treatment = "EXCLUDE_ALL_CREDITS"
@@ -13,7 +13,7 @@ projects = [
     ]
   },
   {
-    project_id             = "project_id"
+    project_id             = "your-project_id"
     billing_account_id     = "billing_account_id"
     budget_display_name    = "Project 2 Budget"
     credit_types_treatment = "EXCLUDE_ALL_CREDITS"
