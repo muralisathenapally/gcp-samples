@@ -1,3 +1,13 @@
+resource "google_project_service" "cloudbilling" {
+  project = var.project_id
+  service = "cloudbilling.googleapis.com"
+}
+
+resource "google_project_service" "billingbudgets" {
+  project = var.project_id
+  service = "billingbudgets.googleapis.com"
+}
+
 data "google_project" "project" {
   project_id = var.project_id
 }
