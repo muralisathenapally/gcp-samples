@@ -1,40 +1,36 @@
 data "google_project" "project" {
-  for_each = { for project in var.projects : project.project_id => project }
-
-  project_id = each.value.project_id
+  project_id = var.project_id
 }
 
 resource "google_monitoring_notification_channel" "notification_channels" {
-  project = var.project_id
+  project  = var.project_id
   for_each = toset(var.notification_channel_emails)
 
   type         = "email"
-  display_name = "Budget Alert Notification for ${each.value}"
+  display_name = each.value
   labels = {
     email_address = each.value
   }
 }
 
 resource "google_billing_budget" "budget" {
-  for_each = { for project in var.projects : project.project_id => project }
-
-  billing_account = each.value.billing_account_id
-  display_name    = each.value.budget_display_name
+  billing_account = var.billing_account_id
+  display_name    = var.budget_display_name
 
   budget_filter {
-    projects               = ["projects/${data.google_project.project[each.key].number}"]
-    credit_types_treatment = each.value.credit_types_treatment
+    projects               = ["projects/${data.google_project.project.number}"]
+    credit_types_treatment = var.credit_types_treatment
   }
 
   amount {
     specified_amount {
       currency_code = "USD"
-      units         = each.value.budget_amount
+      units         = var.budget_amount
     }
   }
 
   dynamic "threshold_rules" {
-    for_each = each.value.threshold_percentages
+    for_each = var.threshold_percentages
     content {
       threshold_percent = threshold_rules.value
       spend_basis       = "CURRENT_SPEND"
