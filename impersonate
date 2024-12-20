@@ -223,3 +223,9 @@ https://support.google.com/a/answer/1047213?hl=en
 
 https://cloud.google.com/iam/docs/troubleshooting-workload-identity-federation#error-connecting-issuer
 
+===============================================================================================================================================================================
+Added one service account info from given service accounts in code and tried to deploy. However it resulted in error due to options changed/deprecated in the terraform code.
+
+Terraform gcp secret manager secret resource documentation link: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret.html
+
+Resolution is to rewrite/upgrade code and then deploy
