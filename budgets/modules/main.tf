@@ -1,7 +1,18 @@
+resource "google_project_service" "cloudbilling" {
+  project = var.project_id
+  service = "cloudbilling.googleapis.com"
+}
+
+resource "google_project_service" "billingbudgets" {
+  project = var.project_id
+  service = "billingbudgets.googleapis.com"
+}
+
 data "google_project" "project" {
   project_id = var.project_id
 }
 
+#Notification Channels#
 resource "google_monitoring_notification_channel" "notification_channels" {
   project  = var.project_id
   for_each = toset(var.notification_channel_emails)
@@ -13,6 +24,7 @@ resource "google_monitoring_notification_channel" "notification_channels" {
   }
 }
 
+#Budget#
 resource "google_billing_budget" "budget" {
   billing_account = var.billing_account_id
   display_name    = var.budget_display_name
