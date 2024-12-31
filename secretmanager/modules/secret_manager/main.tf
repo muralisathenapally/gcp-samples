@@ -1,42 +1,38 @@
-terraform {
-  required_version = ">= 0.14.5"
-  required_providers {
-    google = ">= 4.8"
-  }
-}
-
 locals {
   topic_id = (var.setup_secret_manager == "no" ? "projects/${var.project_id}/topics/${var.project_id}-notification-topic" : google_pubsub_topic.topic[0].id)
 }
 data "google_project" "project" {
   project_id = var.project_id
 }
-
-resource "google_project_service_identity" "sm_sa" {
-  provider = google-beta
-
+resource "google_project_service" "project_sa" {
   project = data.google_project.project.project_id
   service = "secretmanager.googleapis.com"
+}
+resource "google_project_service_identity" "sm_sa" {
+  depends_on = [google_project_service.project_sa]
+  provider   = google-beta
+  project    = data.google_project.project.project_id
+  service    = "secretmanager.googleapis.com"
 }
 
 resource "google_project_iam_member" "sm_sa_pubsub_publisher" {
   project = data.google_project.project.project_id
   role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${google_project_service_identity.sm_sa.email}"
+  member  = google_project_service_identity.sm_sa.member
 }
 
 resource "google_pubsub_topic" "topic" {
-  count = var.setup_secret_manager == "yes" ? 1 : 0
+  count   = var.setup_secret_manager == "yes" ? 1 : 0
   name    = "${var.project_id}-notification-topic"
   project = var.project_id
 }
 
 # Create a slot for the secret in Secret Manager
 resource "google_secret_manager_secret" "secret" {
-  depends_on = [google_project_iam_member.sm_sa_pubsub_publisher]
-  project   = var.project_id
-  secret_id = var.secret_id
-  labels    = var.labels
+  depends_on = [google_project_iam_member.sm_sa_pubsub_publisher, google_project_service_identity.sm_sa]
+  project    = var.project_id
+  secret_id  = var.secret_id
+  labels     = var.labels
   topics {
     name = local.topic_id
   }
@@ -67,9 +63,9 @@ resource "google_secret_manager_secret" "secret" {
         }
       }
     }
-    automatic = length(var.replication) > 0 ? null : true
+    auto {}
   }
-  lifecycle { ignore_changes = [rotation]}
+  lifecycle { ignore_changes = [rotation] }
 }
 
 # Allow the supplied accounts to read the secret value from Secret Manager

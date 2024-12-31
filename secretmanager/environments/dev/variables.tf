@@ -1,3 +1,3 @@
-variable "secret_details" {
+variable "secrets" {
   type = any
 }

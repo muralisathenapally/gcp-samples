@@ -7,44 +7,18 @@
 
 ## While creating secret for service account json key, secret id should be in "{sa name}-{json-key}" fromat
 
-secret_details = {
-  "my-secret" = {
-    project_id       = "vm-test-nessus"
+secrets = [
+  {
+    project_id           = "PROJECT_ID"
     setup_secret_manager = "yes"
-    secret_id        = "test-secret-new"
-    secret_accessors = ["serviceAccount:test-svc@vm-test-nessus.iam.gserviceaccount.com"]
-    replication      = {}
+    secret_id            = "SA_NAME-json-key"
+    secret_accessors     = ["serviceAccount:SERVICE_ACCOUNT_EMAIL"]
+    replication          = {}
     rotation_details = [
       {
-        next_rotation_time = "2022-10-01T03:05:00Z"
+        next_rotation_time = "2024-12-31T17:30:00Z"
         rotation_period    = "2592000s"
-      }
-    ]
-  },
-  "my-secret-1" = {
-    project_id       = "vm-test-nessus"
-    setup_secret_manager = "no"
-    secret_id        = "test-secret-new-1"
-    secret_accessors = ["serviceAccount:test-svc@vm-test-nessus.iam.gserviceaccount.com"]
-    replication      = {}
-    rotation_details = [
-      {
-        next_rotation_time = "2022-10-01T03:05:00Z"
-        rotation_period    = "2592000s"
-      }
-    ]
-  },
-   "my-secret-3" = {
-    project_id       = "vm-test-nessus"
-    setup_secret_manager = "yes"
-    secret_id        = "test-svc-json-key" ## should be {sa name}-{json-key}
-    secret_accessors = ["serviceAccount:test-svc@vm-test-nessus.iam.gserviceaccount.com"]
-    replication      = {}
-    rotation_details = [
-      {
-        next_rotation_time = "2022-10-01T03:05:00Z"
-        rotation_period    = "3700s"
       }
     ]
   }
-}
+]
