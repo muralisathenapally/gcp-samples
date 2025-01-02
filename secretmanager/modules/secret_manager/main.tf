@@ -1,9 +1,11 @@
 locals {
   topic_id = (var.setup_secret_manager == "no" ? "projects/${var.project_id}/topics/${var.project_id}-notification-topic" : google_pubsub_topic.topic[0].id)
 }
+
 data "google_project" "project" {
   project_id = var.project_id
 }
+
 resource "google_project_service" "project_sa" {
   project = data.google_project.project.project_id
   service = "secretmanager.googleapis.com"
@@ -68,9 +70,6 @@ resource "google_secret_manager_secret" "secret" {
   lifecycle { ignore_changes = [rotation] }
 }
 
-# Allow the supplied accounts to read the secret value from Secret Manager
-# Note: this module is non-authoritative and will not remove or modify this role
-# from accounts that were granted the role outside this module.
 resource "google_secret_manager_secret_iam_member" "secret" {
   for_each  = toset(var.accessors)
   project   = var.project_id
