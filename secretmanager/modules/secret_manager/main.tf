@@ -10,6 +10,7 @@ resource "google_project_service" "project_sa" {
   project = data.google_project.project.project_id
   service = "secretmanager.googleapis.com"
 }
+
 resource "google_project_service_identity" "sm_sa" {
   depends_on = [google_project_service.project_sa]
   provider   = google-beta
