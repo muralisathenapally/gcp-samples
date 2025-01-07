@@ -10,6 +10,7 @@ resource "google_storage_bucket" "bucket" {
   count    = var.setup_secret_manager == "yes" ? 1 : 0
   name     = "${var.project_id}-function"
   location = "US"
+  project  = var.project_id
 }
 
 # Add source code zip to bucket
@@ -22,6 +23,7 @@ resource "google_storage_bucket_object" "zip" {
 
 resource "google_cloudfunctions_function" "function" {
   depends_on            = [google_project_iam_member.cloudfunction_gcs_read]
+  project               = var.project_id
   count                 = var.setup_secret_manager == "yes" ? 1 : 0
   name                  = "${var.project_id}-secret-manager"
   runtime               = "python310"
