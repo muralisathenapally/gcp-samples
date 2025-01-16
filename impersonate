@@ -229,3 +229,20 @@ Added one service account info from given service accounts in code and tried to 
 Terraform gcp secret manager secret resource documentation link: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret.html
 
 Resolution is to rewrite/upgrade code and then deploy
+
+
+
+
+
+1. Application is on Compute VM:
+  Option1:
+  VM has a service account attached to it, grant the service account access to secret that the application needs
+  write a bash script that will read the secret and create the json key in a file in the server which can be used by application
+  
+  Option2:
+  VM has a service account attached to it, grant the service account access to secret that the application needs
+  Modify application code so that i will get the secret from secret manager and use
+
+
+2. If the application is running on GKE or CloudRun, we can use option 2
+3. Avoid using json key and use the service account attached to VM, GKE, Cloudrun
