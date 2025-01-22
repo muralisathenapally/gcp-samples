@@ -26,7 +26,7 @@ def process_pubsub_event(event, context):
             if service_account_name == project:
                 # If the service_account_name is equal to the project value
                 domain = "appspot.gserviceaccount.com"
-            elif re.match(r"^\d{13}-$", service_account_name):
+            elif re.match(r"^\d{13}-.*$", service_account_name):
                 # If the service_account_name is 13 digits followed by a hyphen
                 domain = "developer.gserviceaccount.com"
             else:
