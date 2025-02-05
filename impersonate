@@ -246,3 +246,10 @@ Resolution is to rewrite/upgrade code and then deploy
 
 2. If the application is running on GKE or CloudRun, we can use option 2
 3. Avoid using json key and use the service account attached to VM, GKE, Cloudrun
+
+
+
+
+
+
+protoPayload.methodName=~"google.container.*.ClusterManager.CreateCluster" OR protoPayload.methodName=~"google.container.*.ClusterManager.DeleteCluster" 
