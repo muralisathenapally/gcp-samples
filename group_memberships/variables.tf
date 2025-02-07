@@ -1,0 +1,1 @@
+variable "group_memberships" {}
