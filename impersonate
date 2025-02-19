@@ -253,3 +253,12 @@ Resolution is to rewrite/upgrade code and then deploy
 
 
 protoPayload.methodName=~"google.container.*.ClusterManager.CreateCluster" OR protoPayload.methodName=~"google.container.*.ClusterManager.DeleteCluster" 
+
+
+
+principalSet://iam.googleapis.com/organizations/01234567890123
+
+
+
+https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_organization_id
+https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains
