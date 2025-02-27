@@ -1,0 +1,32 @@
+resource "google_iam_deny_policy" "deny_all_except_exceptions" {
+  name     = "deny_resource_deletion"
+  parent   = urlencode("cloudresourcemanager.googleapis.com/organizations/DEV_ORG_ID")
+
+  rule {
+    deny_rule {
+      denied_principals = [
+        "principalSet://goog/public:all"
+      ]
+
+      exception_principals = [
+        "user:d-k@example.com"
+        "user:t-k@example.com"
+        "user:s-k@example.com"
+        "serviceAccount:allowed-sa@project.iam.gserviceaccount.com"
+      ]
+
+      denied_permissions = [
+        "compute.googleapis.com/instances.delete",
+        "compute.googleapis.com/disks.delete",
+        "container.googleapis.com/clusters.delete",
+        "iam.googleapis.com/*.delete"
+      ]
+
+      denial_condition {
+        expression  = "resource.matchTag('organization/Environment', 'Dev')"
+        title       = "Deny All Except Excluded in Dev Environment"
+        description = "Blocks all access unless explicitly excluded when the Environment tag is 'Dev'."
+      }
+    }
+  }
+}
