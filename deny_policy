@@ -17,8 +17,7 @@ resource "google_iam_deny_policy" "deny_all_except_exceptions" {
         "compute.googleapis.com/instances.delete",
         "compute.googleapis.com/disks.delete",
         "container.googleapis.com/clusters.delete",
-        "iam.googleapis.com/serviceAccounts.delete",
-        "iam.googleapis.com/serviceAccountKeys.delete"
+        "iam.googleapis.com/*.delete"
       ]
 
       denial_condition {
