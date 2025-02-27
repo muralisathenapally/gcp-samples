@@ -1,6 +1,6 @@
 resource "google_iam_deny_policy" "deny_all_except_exceptions" {
   name     = "deny_resource_deletion"
-  parent   = "organizations/ORG_ID"
+  parent   = "cloudresourcemanager.googleapis.com/organizations/ORG_ID"
 
   rule {
     deny_rule {
