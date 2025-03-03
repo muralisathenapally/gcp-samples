@@ -1,5 +1,5 @@
 resource "google_iam_deny_policy" "deny_all_except_exceptions" {
-  name   = "deny_resource_deletion"
+  name   = "deny-resource-deletion"
   parent = urlencode("cloudresourcemanager.googleapis.com/organizations/${var.org_id}")
 
   rule {
