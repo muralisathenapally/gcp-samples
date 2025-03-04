@@ -25,3 +25,5 @@ sudo systemctl restart google-cloud-ops-agent"*"
       
 
       
+
+https://cloud.google.com/architecture/framework
