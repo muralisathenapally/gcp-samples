@@ -1,0 +1,18 @@
+Introduction:
+This solution will monitor changes to resources in a project like creation / deletion/ modification and send an alert to teams channel. It uses below services 
+
+1. Cloud asset inventory for keeping track of resources 
+2. ⁠pubsub topic for sending messages to cloud run services
+3. ⁠cloud run to run services that processes messages from pubsub and sends notifications 
+4. ⁠big query table to store alerts details
+
+
+It has 2 services,
+1. Cai-service
+2. ⁠ack-service
+
+How the solution works:
+
+1. When a user creates/deletes/modifies a resource in a project, cloud asset inventory will detect that change and sends the details of to the pubsub topic
+2. ⁠Pubsub topic will then forward the messages to cai-service running on cloudrun, which will then process the message, write the details of the change to big query table and sends out a notification to teams channel 
+3. ⁠This notification has a link to ack-service along with a uuid of the alert detail from the big query table, when the user clicks on the link, ack-service will go and update the alert record in big query table as acknowledged
