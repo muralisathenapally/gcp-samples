@@ -1,0 +1,23 @@
+What is Cloud Deploy?
+	•	Cloud Deploy is a managed CI/CD service in Google Cloud.
+	•	It automates delivery of your application to multiple environments (e.g., dev, staging, prod).
+	•	It mainly works with GKE, Cloud Run, and Anthos.
+	•	It defines a release pipeline using a YAML config file (delivery pipeline and targets).
+
+What do Cloud Deploy Policies do?
+	•	Policies in Cloud Deploy are about security and governance.
+	•	They can:
+	•	Control who can approve a release to the next environment.
+	•	Enforce manual approvals before promotion (e.g., from staging to prod).
+	•	Restrict what artifacts (images, manifests) can be deployed based on constraints.
+
+Cloud deploy Policies Not Applicable to Cloud Build Triggers
+	•	Cloud Build and Cloud Deploy are separate services:
+	•	Cloud Build focuses on building and optionally deploying code via triggers.
+	•	Cloud Deploy is focused on managing and controlling deployments across environments.
+	Cloud Build:
+	•	Doesn’t have the deployment pipeline structure like Cloud Deploy.
+	•	Doesn’t support approvals or promotion logic between environments.
+	•	Cloud Build triggers are meant to build code, run tests, and optionally deploy.
+	•	Cloud Deploy policies are designed to govern deployments, not builds.
+	•	The two services have different roles in the CI/CD pipeline.
