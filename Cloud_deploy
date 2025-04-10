@@ -34,3 +34,5 @@ this policy can be applied every day or specific days and specific times also.
 For ex: if you want to block releases on weekends, we create a policy and choose saturday and sunday and select the time. now when someone tries to do a release on weekend, they will be denied.
 
 Deploy policy can also be overwritten but the person trying to do so must have clouddeploy.deployPolicies.override permission.
+
+All the actions can be performed from GCP console, or we can write skaffold.yaml and manifest.yaml and apply using gcloud deploy apply command.
