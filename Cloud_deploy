@@ -21,3 +21,16 @@ Cloud deploy Policies Not Applicable to Cloud Build Triggers
 	•	Cloud Build triggers are meant to build code, run tests, and optionally deploy.
 	•	Cloud Deploy policies are designed to govern deployments, not builds.
 	•	The two services have different roles in the CI/CD pipeline.
+
+=================================================================================================================================================================================================
+
+Cloud deploy manages releases, rollouts and rollbacks to GKE and Cloud Run. while doing these it can enforce approvals and deny actions using policies.
+To do this, first a delivery pipeline needs to be created
+Delivery pipeline deployes docker images to GKE or Cloudrun. these are called targets. while creating delivery pipeline we can choose the target. and also enforce approval for releases.
+
+Deploy polices can restrict pipeline actions like Create, Advance, Approve, Cancel, Ignore job, Retry job, Roll back and Terminate job run. we must chose on which day to apply this policy. 
+this policy can be applied every day or specific days and specific times also. 
+
+For ex: if you want to block releases on weekends, we create a policy and choose saturday and sunday and select the time. now when someone tries to do a release on weekend, they will be denied.
+
+Deploy policy can also be overwritten but the person trying to do so must have clouddeploy.deployPolicies.override permission.
