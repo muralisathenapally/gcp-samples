@@ -262,3 +262,20 @@ principalSet://iam.googleapis.com/organizations/01234567890123
 
 https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_organization_id
 https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains
+
+
+
+
+
+
+
+  <repository>
+    <id>central</id>
+    <url>https://repo.maven.apache.org/maven2</url>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+    <snapshots>
+      <enabled>false</enabled>
+    </snapshots>
+  </repository>
