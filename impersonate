@@ -279,3 +279,7 @@ https://cloud.google.com/resource-manager/docs/organization-policy/restricting-d
       <enabled>false</enabled>
     </snapshots>
   </repository>
+
+
+
+cat ~/.m2/settings.xml
