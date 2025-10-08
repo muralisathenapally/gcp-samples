@@ -1,33 +1,36 @@
+##=================== main.tf  =================================##
+
 resource "google_org_policy_policy" "vertexai_allowed_models" {
-  name = "organizations/${var.org_id}/policies/vertexai.allowedModels"
+  name     = "projects/${var.project_id}/policies/vertexai.allowedModels"
+  parent   = "projects/${var.project_id}"
 
   spec {
     rules {
       values {
-        allowed_values = var.allowed_models
+        denied_values = var.denied_models
       }
     }
   }
 }
 
 
-##====================================================##
+##=================== variables.tf  =================================##
 
-variable "org_id" {
-  description = "The organization ID where the policy will be applied"
+variable "project_id" {
+  description = "The project ID where the policy will be applied"
   type        = string
 }
 
-variable "allowed_models" {
-  description = "List of allowed Vertex AI models"
+variable "denied_models" {
+  description = "List of denied Vertex AI models"
   type        = list(string)
 }
 
-##====================================================##
+##=================== terraform.tfvards =================================##
 
-org_id = "1234567890"
+project_id = "1234567890"
 
-allowed_models = [
+denied_models = [
   "publishers/meta/models/llama3:deploy",
   "publishers/google/models/gemini-2.0-flash-001:tune",
   "publishers/hf-google/models/gemma-2b:deploy"
