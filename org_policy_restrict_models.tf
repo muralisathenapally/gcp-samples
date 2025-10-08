@@ -31,7 +31,14 @@ variable "denied_models" {
 project_id = "1234567890"
 
 denied_models = [
-  "publishers/meta/models/llama3:deploy",
-  "publishers/google/models/gemini-2.0-flash-001:tune",
-  "publishers/hf-google/models/gemma-2b:deploy"
+  "publishers/deepseek-ai/models/deepseek-r1:*",
+  "publishers/deepseek-ai/models/deepseek-v3-1:*",
+  "publishers/deepseek-ai/models/deepseek-v3:*",
+  "publishers/deepseek-ai/models/deepseek-v3-2:*",
+  "publishers/deepseek-ai/models/deepseek-v3.1-maas:*",
+  "publishers/deepseek-ai/models/deepseek-r1-0528-maas:*",
+  "publishers/mistralai/models/codestral-2501:*",
+  "publishers/qwen/models/qwq:*",
+  "publishers/qwen/models/qwen3:*",
+  "publishers/qwen/models/qwen3-235b-a22b-instruct-2507-maas:*"
 ]
