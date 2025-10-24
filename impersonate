@@ -283,3 +283,14 @@ https://cloud.google.com/resource-manager/docs/organization-policy/restricting-d
 
 
 cat ~/.m2/settings.xml
+
+
+
+
+
+
+
+The main purpose of Checks Guardrails API is to enhance the safety of Generative AI (GenAI) applications by identifying and mitigating potentially harmful content.
+It analyzes user inputs and model outputs (text) to detect content that may violate safety policies, such as hate speech, violence, inappropriate language, or discriminatory remarks
+It provides a score that indicates the likelihood of a violation, allowing developers to set their own thresholds for blocking or logging content.
+Developers can integrate the API to log potential violations or actively block unsafe or inappropriate content from being exposed to users, which is crucial for responsible AI development
