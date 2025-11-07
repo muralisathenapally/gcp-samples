@@ -16,10 +16,7 @@ module "model_armor_template" {
   pi_and_jailbreak_filter_settings = "MEDIUM_AND_ABOVE"
 
   sdp_settings = {
-      advanced_config = {
-        inspect_template     = "projects/{project}/locations/{location}/inspectTemplates/{inspect_template}"
-        deidentify_template  = "projects/{project}/locations/{location}/deidentifyTemplates/{deidentify_template}"
-      }
+      basic_config_filter_enforcement = true
   }
 
   metadata_configs = {
