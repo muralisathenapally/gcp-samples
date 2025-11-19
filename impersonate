@@ -294,3 +294,8 @@ The main purpose of Checks Guardrails API is to enhance the safety of Generative
 It analyzes user inputs and model outputs (text) to detect content that may violate safety policies, such as hate speech, violence, inappropriate language, or discriminatory remarks
 It provides a score that indicates the likelihood of a violation, allowing developers to set their own thresholds for blocking or logging content.
 Developers can integrate the API to log potential violations or actively block unsafe or inappropriate content from being exposed to users, which is crucial for responsible AI development
+
+
+
+gcloud model-armor templates sanitize-user-prompt my-template --location=us-central1 --user-prompt-data="test-user-prompt"
+https://cloud.google.com/sdk/gcloud/reference/model-armor/templates/sanitize-user-prompt
