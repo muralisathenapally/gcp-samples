@@ -299,3 +299,8 @@ Developers can integrate the API to log potential violations or actively block u
 
 gcloud model-armor templates sanitize-user-prompt my-template --location=us-central1 --user-prompt-data="test-user-prompt"
 https://cloud.google.com/sdk/gcloud/reference/model-armor/templates/sanitize-user-prompt
+
+
+
+
+https://kb.parallels.com/en/129398
