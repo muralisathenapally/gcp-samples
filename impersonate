@@ -356,5 +356,26 @@ ORDER BY
   invoice.month,
   project_id;
 
+==============
+
+SELECT
+  invoice.month,
+  project.id   AS project_id,
+  project.name AS project_name,
+
+  SUM(CAST(cost AS NUMERIC)) AS usage_cost,
+  IFNULL(SUM(CAST(c.amount AS NUMERIC)), 0) AS credits,
+  SUM(CAST(cost AS NUMERIC))
+    + IFNULL(SUM(CAST(c.amount AS NUMERIC)), 0) AS total_exact
+
+FROM `project-ID.dataset.gcp_billing_export_v1_XXXXXX-XXXXXX-XXXXXX`
+LEFT JOIN UNNEST(credits) AS c
+GROUP BY
+  invoice.month,
+  project_id,
+  project_name
+ORDER BY
+  invoice.month DESC,
+  project_id;
 
 
