@@ -385,3 +385,21 @@ ORDER BY
 
 
 https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery-setup#enable-bq-export
+
+
+
+SELECT
+  invoice.month AS month,
+  project.id    AS project_id,
+  project.name  AS project_name,
+  SUM(CAST(cost AS NUMERIC))
+    + IFNULL(SUM(CAST(c.amount AS NUMERIC)), 0) AS total_cost
+FROM `project-ID.dataset.gcp_billing_export_v1_XXXXXX-XXXXXX-XXXXXX`
+LEFT JOIN UNNEST(credits) AS c
+GROUP BY
+  month,
+  project_id,
+  project_name
+ORDER BY
+  month DESC,
+  total_cost DESC
