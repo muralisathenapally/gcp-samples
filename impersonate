@@ -403,3 +403,10 @@ GROUP BY
 ORDER BY
   month DESC,
   total_cost DESC
+
+
+
+
+
+
+https://docs.cloud.google.com/bigquery/docs/tables#create_a_table_from_a_query_result
