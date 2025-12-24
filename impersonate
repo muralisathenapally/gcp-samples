@@ -427,4 +427,30 @@ CREATE TABLE `YOURDATASET.project_budgets` (
   updated_by STRING
 );
 
+===============
 
+
+INSERT INTO `YOURDATASET.project_budgets` (
+  project_name,
+  project_id,
+  project_number,
+  monthly_budget_amount,
+  alerting_setup,
+  alerting_name,
+  date_created,
+  date_updated,
+  created_by,
+  updated_by
+)
+VALUES (
+  'MyProject1',
+  'my-projet-prod',
+  123456789012,
+  5000,
+  TRUE,
+  'Monthly Budget Alert',
+  TIMESTAMP '2024-06-01',
+  TIMESTAMP '2024-06-15',
+  'admin@company.com',
+  'admin@company.com'
+);
