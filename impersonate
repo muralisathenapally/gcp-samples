@@ -410,3 +410,21 @@ ORDER BY
 
 
 https://docs.cloud.google.com/bigquery/docs/tables#create_a_table_from_a_query_result
+
+
+
+
+CREATE TABLE `YOURDATASET.project_budgets` (
+  project_name STRING,
+  project_id STRING,
+  project_number INT64,
+  monthly_budget_amount NUMERIC,
+  alerting_setup BOOL,
+  alerting_name STRING,
+  date_created TIMESTAMP,
+  date_updated TIMESTAMP,
+  created_by STRING,
+  updated_by STRING
+);
+
+
