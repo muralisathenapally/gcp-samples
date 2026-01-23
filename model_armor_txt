@@ -1,0 +1,13 @@
+Model Armor (GCP) — AI Security & Guardrails
+
+Model Armor is a managed AI security layer on Google Cloud that helps protect generative AI applications from misuse, data leakage, and malicious inputs.
+
+Core Guardrails & Protections:
+==============================
+Prompt Injection Protection : Detects and blocks prompt injection attacks designed to override system instructions or manipulate model behavior.
+Malicious Input Detection: Filters prompts containing harmful, unsafe, or policy-violating content before they reach the model.
+Sensitive Data Protection: identifies and helps prevent exposure of sensitive information (e.g., secrets, credentials, PII) in both prompts and responses.
+Model Misuse Prevention: Enforces safeguards against attempts to repurpose models for disallowed or high-risk use cases.
+Centralized Enforcement: Applies consistent AI security policies across all applications and workloads using generative models.
+Audit & Monitoring Support: Provides visibility into blocked requests, policy violations, and threat patterns for security review and compliance reporting.
+Reduces Data Exfiltration Risk: Helps prevent attackers from extracting system prompts, proprietary logic, or internal data via model interactions.
