@@ -1,0 +1,1 @@
+rpm --import https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-9
