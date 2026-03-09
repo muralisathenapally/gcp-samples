@@ -42,3 +42,6 @@ projects = [
 ]
 ```
 
+https://docs.cloud.google.com/artifact-registry/docs/os-packages/rpm/configure#config-yum
+
+gcloud beta artifacts print-settings yum    --repository=cloud-kernel-repo    --location=us   --project=PROJECT-ID
