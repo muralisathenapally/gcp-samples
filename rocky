@@ -20,4 +20,4 @@ EOL
 sudo yum makecache
 
 
-gcloud beta artifacts print-settings yum    --repository=REPOSITORY    --location=LOCATION   --project=PROJECT-ID
+gcloud beta artifacts print-settings yum    --repository=cloud-kernel-repo    --location=us   --project=PROJECT-ID
