@@ -1,1 +1,20 @@
-rpm --import https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-9
+sudo yum makecache
+
+--------
+
+sudo yum install yum-plugin-artifact-registry
+
+------------
+
+sudo tee -a /etc/yum.repos.d/artifact-registry.repo << EOL
+[REPOSITORY]
+name=REPOSITORY
+baseurl=https://LOCATION-yum.pkg.dev/projects/PROJECT/REPOSITORY
+enabled=1
+repo_gpgcheck=0
+gpgcheck=0
+EOL
+
+------------
+
+sudo yum makecache
