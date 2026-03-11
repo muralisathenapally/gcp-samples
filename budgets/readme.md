@@ -50,6 +50,8 @@ gcloud beta artifacts print-settings yum    --repository=cloud-kernel-repo    --
 
 
 sudo yum makecache
+
 sudo yum --enablerepo=cloud-kernel-repo install PACKAGE
+
 ## replace PACKAGE with package name from repo
 
