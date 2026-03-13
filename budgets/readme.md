@@ -55,3 +55,8 @@ sudo yum --enablerepo=cloud-kernel-repo install PACKAGE
 
 ## replace PACKAGE with package name from repo
 
+
+
+
+
+https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/whats-new-windows?tabs=windows-msrdc-msi
