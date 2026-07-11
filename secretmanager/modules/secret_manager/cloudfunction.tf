@@ -26,7 +26,7 @@ resource "google_cloudfunctions_function" "function" {
   project               = var.project_id
   count                 = var.setup_secret_manager == "yes" ? 1 : 0
   name                  = "${var.project_id}-secret-manager"
-  runtime               = "python310"
+  runtime               = "python312"
   region                = "us-east4"
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.bucket[0].name
