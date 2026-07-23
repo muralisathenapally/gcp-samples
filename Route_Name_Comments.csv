@@ -1,0 +1,7 @@
+Route Name,Comments
+Default - Route,Default route (0.0.0.0/0). Sends all internet-bound traffic to the configured next-hop IP via ethernet/1. Configured as a static route using an IP address next hop.
+Private-10-VR,Routes all 10.0.0.0/8 private network traffic to the GCP-Internal-Router virtual router (next-vr). Used to forward internal traffic between virtual routers.
+Default-Router-VR,Default route within the current virtual router. Forwards all unknown destinations to the GCP-Default-Router virtual router using next-vr.
+Private-10,Routes 10.0.0.0/8 traffic to the internal GCP router via ethernet-1. Configured as a static route with an IP next hop.
+GCP-HC-1,Routes Google Cloud health check traffic (35.191.0.0/16) to the internal GCP router. Required for Google Cloud Load Balancer health checks.
+GCP-HC-2,Routes Google Cloud health check traffic (130.211.0.0/22) to the internal GCP router. Required for Google Cloud Load Balancer health checks.
