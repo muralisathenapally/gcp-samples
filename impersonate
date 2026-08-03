@@ -470,4 +470,10 @@ VALUES
 (237, 111, 17, 'project1-ipam-lab', '10.54.7.0/26'),
 (238, 111, 17, 'project2-ipam-lab', '10.54.7.64/26'),
 (238, 111, 17, 'project3-ipam-lab', '10.54.7.64/26'),
-(239, 113, 18, 'project4-ipam-prod', '10.52.132.0/26');
+(239, 113, 18, 'project4-ipam-prod', '10.52.132.0/VPC 1: VPC DMZ Hub
+Subnet 1 : 10.55.0.0/27 ( us-east-4)
+Subnet 2: 10.55.0.32/27 (us-central-1)
+
+VPC 2: VPC Internal Hub
+Subnet 1 : 10.55.0.64/27 (us-east-4)
+Subnet 2: 10.55.0.96/27 (us-central-1)
