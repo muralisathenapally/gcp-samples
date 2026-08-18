@@ -1,0 +1,23 @@
+Set Env Variables
+=================
+export GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
+export PROJECT_NUMBER=YOUR_PROJECT_NUMBER
+
+Install pluggin
+================
+gcloud components install config-connector
+sudo apt-get install google-cloud-sdk-config-connector
+
+Enable APIs
+===========
+gcloud services enable cloudasset.googleapis.com
+gcloud beta services identity create --service=cloudasset.googleapis.com
+
+Grant access to cloudasset sa
+=============================
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT  --member=serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-cloudasset.iam.gserviceaccount.com  --role=roles/servicenetworking.serviceAgent
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member=serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-cloudasset.iam.gserviceaccount.com  --role=roles/storage.objectAdmin
+
+Export terraform code
+=====================
+gcloud beta resource-config bulk-export  --resource-format=terraform --project=$GOOGLE_CLOUD_PROJECT  >> {$GOOGLE_CLOUD_PROJECT}.tf
