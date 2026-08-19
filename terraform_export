@@ -20,4 +20,4 @@ gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member=serviceAcc
 
 Export terraform code
 =====================
-gcloud beta resource-config bulk-export  --resource-format=terraform --project=$GOOGLE_CLOUD_PROJECT  >> {$GOOGLE_CLOUD_PROJECT}.tf
+gcloud beta resource-config bulk-export  --resource-format=terraform --project=$GOOGLE_CLOUD_PROJECT  >> $GOOGLE_CLOUD_PROJECT.tf
