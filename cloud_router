@@ -1,13 +1,13 @@
 
 US-EAST4 REEGION
 ===================
-gcloud compute routers create dmz-router-us-east4  --project=PROJECT_ID  --network=NETWORK  --region=us-east4  --asn=64512
-gcloud compute routers create internal-router-us-east4  --project=PROJECT_ID  --network=NETWORK  --region=us-east4  --asn=64512
-gcloud compute routers create transit-router-us-east4  --project=PROJECT_ID  --network=NETWORK  --region=us-east4  --asn=64512
+gcloud compute routers create dmz-router-us-east4  --project=PROJECT_ID  --network=vpc-dmz-hub  --region=us-east4  --asn=64512
+gcloud compute routers create internal-router-us-east4  --project=PROJECT_ID  --network=vpc-internal-hub  --region=us-east4  --asn=64512
+gcloud compute routers create transit-router-us-east4  --project=PROJECT_ID  --network=vpc-transit-hub  --region=us-east4  --asn=64512
 
 
 US-CENTRAL1 REGION
 ====================
-gcloud compute routers create dmz-router-us-central1  --project=PROJECT_ID  --network=NETWORK  --region=us-central1  --asn=64513
-gcloud compute routers create internal-router-us-central1  --project=PROJECT_ID  --network=NETWORK  --region=us-central1  --asn=64513
-gcloud compute routers create transit-router-us-central1  --project=PROJECT_ID  --network=NETWORK  --region=us-central1  --asn=64513
+gcloud compute routers create dmz-router-us-central1  --project=PROJECT_ID  --network=vpc-dmz-hub  --region=us-central1  --asn=64513
+gcloud compute routers create internal-router-us-central1  --project=PROJECT_ID  --network=vpc-internal-hub  --region=us-central1  --asn=64513
+gcloud compute routers create transit-router-us-central1  --project=PROJECT_ID  --network=vpc-transit-hub  --region=us-central1  --asn=64513
