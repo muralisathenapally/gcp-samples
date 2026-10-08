@@ -1,0 +1,20 @@
+Hi Team,
+
+We noticed that the org information for few of our GCP projects is currently listed as PROD in CMDB, whereas these projects belong to the LAB org.
+
+We have verified the project details directly in the GCP Console and confirmed that the correct classification for these projects iis LAB. Please find the correct information below:
+
+| GCP Project   | Current CMDB Value | Correct Value |
+| ------------- | ------------------ | ------------- |
+| `<project-1>` | PROD                | LAB          |
+| `<project-2>` | PROD                | LAB          |
+
+Could you please update the above entries in CMDB based on the verified information?
+
+Previously, it was mentioned that the GCP project information in CMDB is sourced from Axonious. We will also look into how the project information is being pulled by Axious and subsequently shared with the CMDB team, so we can understand why these entries were classified incorrectly and help prevent similar issues going forward.
+
+For now, could you please make the necessary corrections to the two records based on the information provided above?
+
+Please let us know once the updates have been completed.
+
+Thanks,
