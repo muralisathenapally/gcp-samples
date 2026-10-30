@@ -1,0 +1,29 @@
+{
+  "displayName": "GCP Month-to-Date Billing Report",
+  "documentation": {
+    "content": "# GCP Month-to-Date Billing Report\n\nA new billing report has been generated.\n\n**Project:** YOUR_PROJECT_ID\n\n**Cloud Run Service:** gcp-billing-report\n\n## Billing Report\n\n```\n${log.extracted_label.billing_report}\n```\n\n---\nGenerated automatically by Google Cloud Monitoring.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Billing report log detected",
+      "conditionMatchedLog": {
+        "filter": "resource.type=\"cloud_run_revision\" AND resource.labels.service_name=\"gcp-billing-report\" AND resource.labels.project_id=\"YOUR_PROJECT_ID\" AND textPayload:\"GCP MONTH-TO-DATE BILLING REPORT\"",
+        "labelExtractors": {
+          "billing_report": "EXTRACT(textPayload)"
+        }
+      }
+    }
+  ],
+  "combiner": "OR",
+  "enabled": true,
+  "notificationChannels": [
+    "projects/YOUR_PROJECT_ID/notificationChannels/15836166878221809443"
+  ],
+  "alertStrategy": {
+    "notificationRateLimit": {
+      "period": "300s"
+    },
+    "autoClose": "604800s"
+  }
+}
