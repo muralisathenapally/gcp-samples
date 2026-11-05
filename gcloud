@@ -1,23 +1,31 @@
 
 @echo off
-setlocal EnableExtensions EnableDelayedExpansion
+setlocal EnableExtensions DisableDelayedExpansion
 
-title GCP Architecture Discovery
+title GCP Resource Discovery
 
 set "ROOT=%~dp0"
-set "OUTPUT=%ROOT%output"
 set "PROJECT_FILE=%ROOT%projects.txt"
+set "OUTPUT=%ROOT%output"
 
 if not exist "%OUTPUT%" mkdir "%OUTPUT%"
 
 echo ==========================================
-echo       GCP ARCHITECTURE DISCOVERY
+echo       GCP RESOURCE DISCOVERY
 echo ==========================================
 
-REM Check gcloud
+REM Check gcloud installation
 where gcloud >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Google Cloud CLI not installed.
+    echo ERROR: Google Cloud CLI is not installed.
+    pause
+    exit /b 1
+)
+
+REM Check authentication
+gcloud auth list --filter=status:ACTIVE --format="value(account)" >nul 2>&1
+if errorlevel 1 (
+    echo ERROR: Please run gcloud auth login.
     pause
     exit /b 1
 )
@@ -29,132 +37,87 @@ if not exist "%PROJECT_FILE%" (
     exit /b 1
 )
 
-REM Check authentication
-gcloud auth list --filter=status:ACTIVE --format="value(account)" > "%TEMP%\gcp_auth.txt"
+echo Project ID,API Enablement,Resources,Enabled Services,Status > "%OUTPUT%\discovery_summary.csv"
 
-for %%A in ("%TEMP%\gcp_auth.txt") do (
-    if %%~zA EQU 0 (
-        echo Please run gcloud auth login first.
-        pause
-        exit /b 1
-    )
-)
-
-del "%TEMP%\gcp_auth.txt"
-
-echo.
-echo Reading project IDs from projects.txt...
-
-set /a TOTAL=0
-
-for /f "usebackq tokens=* delims=" %%P in ("%PROJECT_FILE%") do (
-    set "PROJECT=%%P"
-
-    if defined PROJECT (
-        if not "!PROJECT:~0,1!"=="#" (
-            set /a TOTAL+=1
-            set "PROJECT_!TOTAL!=!PROJECT!"
-        )
-    )
-)
-
-if !TOTAL! EQU 0 (
-    echo No project IDs found.
-    pause
-    exit /b 1
-)
-
-echo Total projects found: !TOTAL!
-
-echo Project ID,Resources,Enabled APIs,Status > "%OUTPUT%\batch_summary.csv"
-
-REM Process projects
-for /L %%I in (1,1,!TOTAL!) do (
-
-    set "PROJECT=!PROJECT_%%I!"
-
-    echo.
-    echo ==========================================
-    echo Processing: !PROJECT!
-    echo ==========================================
-
-    set "DIR=%OUTPUT%\!PROJECT!"
-
-    if not exist "!DIR!" mkdir "!DIR!"
-
-    set "STATUS=SUCCESS"
-    set "RESOURCE_COUNT=0"
-    set "SERVICE_COUNT=0"
-
-    REM 1. Resource discovery
-    echo Discovering resources...
-
-    gcloud asset search-all-resources ^
-        --scope=projects/!PROJECT! ^
-        --format=json > "!DIR!\inventory.json" 2> "!DIR!\asset_errors.txt"
-
-    if errorlevel 1 (
-        echo [] > "!DIR!\inventory.json"
-        set "STATUS=FAILED"
-    )
-
-    REM 2. Enabled services
-    echo Discovering enabled APIs...
-
-    gcloud services list ^
-        --enabled ^
-        --project=!PROJECT! ^
-        --format=json > "!DIR!\enabled_services.json" 2> "!DIR!\service_errors.txt"
-
-    if errorlevel 1 (
-        echo [] > "!DIR!\enabled_services.json"
-        set "STATUS=PARTIAL"
-    )
-
-    REM 3. Inventory CSV
-    echo Generating inventory CSV...
-
-    gcloud asset search-all-resources ^
-        --scope=projects/!PROJECT! ^
-        --format="csv(name,assetType,displayName,location,state)" ^
-        > "!DIR!\inventory.csv"
-
-    REM 4. Resource type summary
-    echo Generating resource summary...
-
-    powershell -NoProfile -Command ^
-        "$data = Import-Csv '!DIR!\inventory.csv'; $data | Group-Object assetType | Select-Object @{N='Resource Type';E={$_.Name}}, @{N='Count';E={$_.Count}} | Export-Csv '!DIR!\resource_summary.csv' -NoTypeInformation"
-
-    REM 5. Mermaid diagram placeholder
-    echo Generating Mermaid diagram...
-
-    (
-        echo flowchart TB
-        echo P["GCP Project: !PROJECT!"]
-        echo P --> R["Discovered GCP Resources"]
-    ) > "!DIR!\architecture.mmd"
-
-    REM 6. Resource count
-    for /f %%C in ('powershell -NoProfile -Command "(Import-Csv '!DIR!\inventory.csv' ^| Measure-Object).Count"') do set "RESOURCE_COUNT=%%C"
-
-    REM 7. Enabled API count
-    for /f %%C in ('powershell -NoProfile -Command "(Get-Content '!DIR!\enabled_services.json' ^| Select-String '\"config\"').Count"') do set "SERVICE_COUNT=%%C"
-
-    echo !PROJECT!,!RESOURCE_COUNT!,!SERVICE_COUNT!,!STATUS! >> "%OUTPUT%\batch_summary.csv"
-
-    echo.
-    echo Completed: !PROJECT!
-    echo Resources: !RESOURCE_COUNT!
-    echo Enabled APIs: !SERVICE_COUNT!
-    echo Status: !STATUS!
+REM Read project IDs
+for /f "usebackq eol=# tokens=1" %%P in ("%PROJECT_FILE%") do (
+    call :PROCESS_PROJECT "%%P"
 )
 
 echo.
 echo ==========================================
 echo       DISCOVERY COMPLETED
 echo ==========================================
-
-echo Output directory: %OUTPUT%
+echo Results saved in: %OUTPUT%
 
 pause
-endlocal
+exit /b 0
+
+
+:PROCESS_PROJECT
+
+set "PROJECT=%~1"
+set "DIR=%OUTPUT%\%PROJECT%"
+
+echo.
+echo ------------------------------------------
+echo Processing project: %PROJECT%
+echo ------------------------------------------
+
+if not exist "%DIR%" mkdir "%DIR%"
+
+set "API_STATUS=SUCCESS"
+set "RESOURCE_STATUS=SUCCESS"
+set "SERVICE_STATUS=SUCCESS"
+
+REM STEP 1: Enable Cloud Asset Inventory API
+echo Enabling Cloud Asset Inventory API...
+
+gcloud services enable cloudasset.googleapis.com ^
+ --project=%PROJECT% ^
+ --quiet > "%DIR%\api_enable.log" 2>&1
+
+if errorlevel 1 (
+    echo API enablement failed.
+    set "API_STATUS=FAILED"
+    goto SAVE_SUMMARY
+)
+
+REM STEP 2: Collect all project resources
+echo Collecting project resources...
+
+gcloud asset search-all-resources ^
+ --scope=projects/%PROJECT% ^
+ --format=json > "%DIR%\resources.json" 2> "%DIR%\resource_errors.log"
+
+if errorlevel 1 (
+    echo Resource discovery failed.
+    echo [] > "%DIR%\resources.json"
+    set "RESOURCE_STATUS=FAILED"
+)
+
+REM STEP 3: Collect enabled GCP services
+echo Collecting enabled GCP services...
+
+gcloud services list ^
+ --enabled ^
+ --project=%PROJECT% ^
+ --format=json > "%DIR%\enabled_services.json" 2> "%DIR%\service_errors.log"
+
+if errorlevel 1 (
+    echo Service discovery failed.
+    echo [] > "%DIR%\enabled_services.json"
+    set "SERVICE_STATUS=FAILED"
+)
+
+:SAVE_SUMMARY
+
+echo %PROJECT%,%API_STATUS%,%RESOURCE_STATUS%,%SERVICE_STATUS% >> "%OUTPUT%\discovery_summary.csv"
+
+echo.
+echo Completed project: %PROJECT%
+echo API: %API_STATUS%
+echo Resources: %RESOURCE_STATUS%
+echo Services: %SERVICE_STATUS%
+
+exit /b 0
