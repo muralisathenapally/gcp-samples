@@ -1,427 +1,204 @@
 
-$ErrorActionPreference = "Stop"
-
-$root = Join-Path $PWD "GCP-Architecture-Discovery"
-$zip = Join-Path $PWD "GCP-Architecture-Discovery.zip"
-
-New-Item -ItemType Directory -Force -Path $root | Out-Null
-New-Item -ItemType Directory -Force -Path "$root\output" | Out-Null
-
-# 1. Project list
-@"
-# Client Name | GCP Project ID
-Client1 | client1-prod-123
-Client2 | client2-prod-456
-Client3 | client3-prod-789
-"@ | Set-Content "$root\projects.txt" -Encoding UTF8
-
-# 2. Python discovery script
-@'
-import csv
-import json
-import re
-import subprocess
-from pathlib import Path
-from collections import Counter, defaultdict
-from datetime import datetime, timezone
-
-BASE = Path(__file__).resolve().parent
-OUTPUT = BASE / "output"
-
-
-def run_gcloud(args):
-    result = subprocess.run(
-        ["gcloud"] + args,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace"
-    )
-
-    if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip())
-
-    return json.loads(result.stdout or "[]")
-
-
-def safe_name(value):
-    return re.sub(r"[^a-zA-Z0-9_-]", "_", value)
-
-
-def read_projects():
-    projects = []
-
-    with open(BASE / "projects.txt", encoding="utf-8-sig") as f:
-        for line in f:
-            line = line.strip()
-
-            if not line or line.startswith("#"):
-                continue
-
-            if "|" in line:
-                client, project = line.split("|", 1)
-                client = client.strip()
-                project = project.strip()
-            else:
-                client = line
-                project = line
-
-            if client and project:
-                projects.append((client, project))
-
-    return projects
-
-
-def discover(project):
-    resources = run_gcloud([
-        "asset", "search-all-resources",
-        f"--scope=projects/{project}",
-        "--format=json"
-    ])
-
-    services = run_gcloud([
-        "services", "list",
-        "--enabled",
-        f"--project={project}",
-        "--format=json"
-    ])
-
-    return resources, services
-
-
-def category(asset_type):
-    value = asset_type.lower()
-
-    categories = {
-        "Networking": ["network", "subnetwork", "firewall",
-                       "forwardingrule", "backendservice",
-                       "router", "address"],
-        "Compute": ["compute.googleapis.com/instance",
-                    "instancegroup", "disk"],
-        "Containers": ["container.googleapis.com"],
-        "Databases": ["sqladmin", "spanner", "firestore",
-                      "bigtable"],
-        "Storage": ["storage.googleapis.com"],
-        "Serverless": ["run.googleapis.com",
-                       "cloudfunctions.googleapis.com",
-                       "appengine"],
-        "Messaging": ["pubsub", "eventarc"],
-        "Analytics": ["bigquery", "dataflow", "dataproc"]
-    }
-
-    for name, keywords in categories.items():
-        if any(keyword in value for keyword in keywords):
-            return name
-
-    return "Other"
-
-
-def make_mermaid(project, resources, output_file):
-    groups = defaultdict(list)
-
-    for item in resources:
-        asset_type = item.get("assetType", "Unknown")
-        name = item.get("displayName") or item.get("name", "Unknown")
-        groups[category(asset_type)].append((name, asset_type))
-
-    lines = [
-        "flowchart TB",
-        f'P["GCP Project: {project}"]'
-    ]
-
-    for group_number, (group, items) in enumerate(sorted(groups.items())):
-        group_id = f"group{group_number}"
-
-        lines.append(f'P --> {group_id}')
-        lines.append(f'  subgraph {group_id}["{group}"]')
-
-        for index, (name, asset_type) in enumerate(items):
-            node = f"n{group_number}_{index}"
-
-            # Escape characters that can interfere with Mermaid labels.
-            label = str(name).replace('"', "'")
-            label = label.replace("<", "&lt;").replace(">", "&gt;")
-            label = label.replace("\n", " ")
-
-            lines.append(f'    {node}["{label}"]')
-
-        lines.append("  end")
-
-    if not resources:
-        lines.append('P --> EMPTY["No resources discovered"]')
-
-    output_file.write_text(
-        "\n".join(lines),
-        encoding="utf-8"
-    )
-
-
-def save_csv(path, resources):
-    fields = [
-        "name", "assetType", "displayName",
-        "location", "state", "createTime", "updateTime"
-    ]
-
-    with open(path, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
-        writer.writeheader()
-
-        for item in resources:
-            writer.writerow({
-                field: item.get(field, "")
-                for field in fields
-            })
-
-
-def process(client, project):
-    print(f"\nProcessing {client}: {project}")
-
-    folder = OUTPUT / safe_name(client)
-    folder.mkdir(parents=True, exist_ok=True)
-
-    errors = []
-    resources = []
-    services = []
-
-    try:
-        resources, services = discover(project)
-        print(f"Resources found: {len(resources)}")
-        print(f"Enabled APIs: {len(services)}")
-    except Exception as error:
-        errors.append(str(error))
-        print(f"Discovery error: {error}")
-
-    inventory = {
-        "client": client,
-        "project_id": project,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "resource_count": len(resources),
-        "resources": resources
-    }
-
-    with open(folder / "inventory.json", "w", encoding="utf-8") as f:
-        json.dump(inventory, f, indent=2)
-
-    with open(folder / "enabled_services.json", "w", encoding="utf-8") as f:
-        json.dump(services, f, indent=2)
-
-    save_csv(folder / "inventory.csv", resources)
-
-    counts = Counter(
-        item.get("assetType", "Unknown")
-        for item in resources
-    )
-
-    with open(folder / "resource_summary.csv",
-              "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f)
-        writer.writerow(["Resource Type", "Count"])
-
-        for name, count in sorted(counts.items()):
-            writer.writerow([name, count])
-
-    make_mermaid(
-        project,
-        resources,
-        folder / "architecture.mmd"
-    )
-
-    (folder / "discovery_errors.txt").write_text(
-        "\n".join(errors) if errors else "No errors",
-        encoding="utf-8"
-    )
-
-    return {
-        "client": client,
-        "project_id": project,
-        "resources": len(resources),
-        "enabled_apis": len(services),
-        "status": "SUCCESS" if not errors else "FAILED",
-        "error": "; ".join(errors)
-    }
-
-
-def main():
-    OUTPUT.mkdir(exist_ok=True)
-
-    projects = read_projects()
-
-    if not projects:
-        print("Please add project IDs to projects.txt")
-        return
-
-    results = []
-
-    for client, project in projects:
-        try:
-            results.append(process(client, project))
-        except Exception as error:
-            print(f"Failed: {error}")
-            results.append({
-                "client": client,
-                "project_id": project,
-                "resources": 0,
-                "enabled_apis": 0,
-                "status": "FAILED",
-                "error": str(error)
-            })
-
-    with open(OUTPUT / "batch_summary.csv",
-              "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=[
-                "client", "project_id", "resources",
-                "enabled_apis", "status", "error"
-            ]
-        )
-        writer.writeheader()
-        writer.writerows(results)
-
-    print("\n===================================")
-    print("GCP DISCOVERY COMPLETED")
-    print(f"Projects processed: {len(results)}")
-    print(f"Output: {OUTPUT}")
-    print("===================================")
-
-
-if __name__ == "__main__":
-    main()
-'@ | Set-Content "$root\gcp_discovery.py" -Encoding UTF8
-
-# 3. Windows execution file
-@'
-@echo off
-title GCP Architecture Discovery
-cd /d "%~dp0"
-
-echo Starting GCP Architecture Discovery...
-echo.
-
-where gcloud >nul 2>&1
-if errorlevel 1 (
-    echo ERROR: Google Cloud CLI is not installed.
-    pause
-    exit /b 1
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$ProjectId
 )
 
-where python >nul 2>&1
-if errorlevel 1 (
-    echo ERROR: Python is not installed.
-    pause
-    exit /b 1
-)
+$ErrorActionPreference = "Continue"
 
-gcloud auth list
-echo.
+$Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$OutputDir = "gcp-inventory-$ProjectId-$Timestamp"
 
-python gcp_discovery.py
+$DiscoveryDir = Join-Path $OutputDir "discovery"
+$EnrichmentDir = Join-Path $OutputDir "enrichment"
+$LogsDir = Join-Path $OutputDir "logs"
 
-echo.
-echo Check the output folder for results.
-pause
-'@ | Set-Content "$root\run_discovery.bat" -Encoding UTF8
+New-Item -ItemType Directory -Force -Path $DiscoveryDir, $EnrichmentDir, $LogsDir | Out-Null
 
-# 4. Instructions
-@'
-GCP ARCHITECTURE DISCOVERY
-==========================
+$LogFile = Join-Path $LogsDir "discovery.log"
 
-REQUIREMENTS
-------------
-1. Windows 10 or Windows 11
-2. Python 3.9 or later
-3. Google Cloud CLI
+function Write-Log {
+    param([string]$Message)
 
-INSTALLATION
-------------
-1. Install Python:
-   https://www.python.org/downloads/
-
-2. Install Google Cloud CLI:
-   https://cloud.google.com/sdk/docs/install
-
-3. Open Command Prompt.
-
-4. Authenticate:
-   gcloud auth login
-
-5. Verify that you can access your client projects.
-
-6. Open projects.txt and replace the sample project IDs.
-
-PROJECT FILE FORMAT
--------------------
-Client1 | client1-prod-123
-Client2 | client2-prod-456
-
-You can add as many projects as needed.
-
-REQUIRED PERMISSIONS
---------------------
-Cloud Asset Viewer
-Service Usage Viewer
-
-The Cloud Asset Inventory API must be enabled
-in the project performing the discovery.
-
-EXECUTION
----------
-Double-click run_discovery.bat.
-
-Alternatively:
-python gcp_discovery.py
-
-OUTPUT
-------
-Each client receives:
-
-inventory.json
-    Complete discovered resource metadata.
-
-inventory.csv
-    Resource-level inventory.
-
-enabled_services.json
-    Enabled GCP APIs.
-
-resource_summary.csv
-    Resource count by type.
-
-architecture.mmd
-    Mermaid architecture diagram.
-
-discovery_errors.txt
-    Errors encountered during discovery.
-
-batch_summary.csv
-    Overall batch execution summary.
-
-VIEW MERMAID DIAGRAMS
----------------------
-1. Open https://mermaid.live/
-2. Open the client's architecture.mmd file.
-3. Copy its contents into the Mermaid editor.
-4. View and export as PNG or SVG.
-
-IMPORTANT
----------
-The diagram groups discovered resources by category.
-It does not claim application-level connections.
-Further service-specific discovery is needed to establish
-actual network and application dependencies.
-'@ | Set-Content "$root\README.txt" -Encoding UTF8
-
-# 5. Create ZIP
-if (Test-Path $zip) {
-    Remove-Item $zip -Force
+    $Line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+    Write-Host $Line
+    Add-Content -Path $LogFile -Value $Line
 }
 
-Compress-Archive -Path "$root\*" -DestinationPath $zip -Force
+function Invoke-Gcloud {
+    param(
+        [string]$Name,
+        [string[]]$Arguments,
+        [string]$Directory = $EnrichmentDir
+    )
 
-Write-Host ""
-Write-Host "=========================================="
-Write-Host "PACKAGE CREATED SUCCESSFULLY"
-Write-Host "Folder: $root"
-Write-Host "ZIP:    $zip"
-Write-Host "=========================================="
+    $OutputFile = Join-Path $Directory "$Name.json"
+    $ErrorFile = Join-Path $LogsDir "$Name.err"
+
+    Write-Log "Collecting $Name"
+
+    $Arguments += "--format=json"
+
+    $Result = & gcloud @Arguments 2> $ErrorFile
+
+    if ($LASTEXITCODE -eq 0) {
+        $Result | Set-Content -Path $OutputFile -Encoding utf8
+        Write-Log "SUCCESS: $Name"
+    }
+    else {
+        Write-Log "WARNING: Failed to collect $Name"
+
+        "[]" | Set-Content -Path $OutputFile -Encoding utf8
+    }
+}
+
+# Verify gcloud
+if (-not (Get-Command gcloud -ErrorAction SilentlyContinue)) {
+    Write-Error "Google Cloud CLI is not installed."
+    exit 1
+}
+
+Write-Log "Starting GCP resource discovery"
+Write-Log "Project: $ProjectId"
+
+# 1. Project information
+Invoke-Gcloud "project" @("projects", "describe", $ProjectId) $DiscoveryDir
+
+Invoke-Gcloud "enabled_apis" @(
+    "services", "list",
+    "--enabled",
+    "--project=$ProjectId"
+) $DiscoveryDir
+
+Invoke-Gcloud "project_iam_policy" @(
+    "projects", "get-iam-policy", $ProjectId
+) $DiscoveryDir
+
+# 2. Cloud Asset Inventory
+Invoke-Gcloud "all_assets" @(
+    "asset", "list",
+    "--scope=projects/$ProjectId",
+    "--content-type=resource"
+) $DiscoveryDir
+
+# Generate resource index and summary
+$AssetFile = Join-Path $DiscoveryDir "all_assets.json"
+
+try {
+    $Assets = Get-Content $AssetFile -Raw | ConvertFrom-Json
+
+    $Index = $Assets | ForEach-Object {
+        [PSCustomObject]@{
+            Name       = $_.name
+            AssetType  = $_.assetType
+            Location   = $_.resource.location
+            Ancestors  = $_.ancestors
+        }
+    }
+
+    $Index | ConvertTo-Json -Depth 100 |
+        Set-Content (Join-Path $DiscoveryDir "resource_index.json") -Encoding utf8
+
+    $Summary = $Assets |
+        Group-Object assetType |
+        ForEach-Object {
+            [PSCustomObject]@{
+                AssetType = $_.Name
+                Count     = $_.Count
+            }
+        }
+
+    $Summary | ConvertTo-Json -Depth 10 |
+        Set-Content (Join-Path $DiscoveryDir "resource_summary.json") -Encoding utf8
+
+}
+catch {
+    Write-Log "WARNING: Could not process asset inventory"
+}
+
+# 3. Compute Engine
+Invoke-Gcloud "compute_instances" @("compute", "instances", "list", "--project=$ProjectId")
+Invoke-Gcloud "compute_disks" @("compute", "disks", "list", "--project=$ProjectId")
+Invoke-Gcloud "compute_zones" @("compute", "zones", "list", "--project=$ProjectId")
+
+# 4. Networking
+Invoke-Gcloud "vpc_networks" @("compute", "networks", "list", "--project=$ProjectId")
+Invoke-Gcloud "subnets" @("compute", "networks", "subnets", "list", "--project=$ProjectId")
+Invoke-Gcloud "firewall_rules" @("compute", "firewall-rules", "list", "--project=$ProjectId")
+Invoke-Gcloud "routes" @("compute", "routes", "list", "--project=$ProjectId")
+Invoke-Gcloud "routers" @("compute", "routers", "list", "--project=$ProjectId")
+Invoke-Gcloud "forwarding_rules" @("compute", "forwarding-rules", "list", "--project=$ProjectId")
+Invoke-Gcloud "backend_services" @("compute", "backend-services", "list", "--project=$ProjectId")
+Invoke-Gcloud "health_checks" @("compute", "health-checks", "list", "--project=$ProjectId")
+Invoke-Gcloud "vpn_tunnels" @("compute", "vpn-tunnels", "list", "--project=$ProjectId")
+
+# 5. GKE
+Invoke-Gcloud "gke_clusters" @("container", "clusters", "list", "--project=$ProjectId")
+
+# 6. Cloud Run regions and services
+Invoke-Gcloud "cloud_run_regions" @("run", "regions", "list")
+
+$RegionsFile = Join-Path $EnrichmentDir "cloud_run_regions.json"
+
+try {
+    $Regions = Get-Content $RegionsFile -Raw | ConvertFrom-Json
+
+    foreach ($Region in $Regions) {
+        $Location = $Region.locationId
+
+        if ($Location) {
+            Invoke-Gcloud "cloud_run_$Location" @(
+                "run", "services", "list",
+                "--project=$ProjectId",
+                "--region=$Location",
+                "--platform=managed"
+            )
+        }
+    }
+}
+catch {
+    Write-Log "WARNING: Cloud Run region discovery failed"
+}
+
+# 7. Cloud Functions Gen2
+Invoke-Gcloud "cloud_functions" @(
+    "functions", "list",
+    "--project=$ProjectId",
+    "--gen2",
+    "--regions=-"
+)
+
+# 8. Databases
+Invoke-Gcloud "cloud_sql_instances" @("sql", "instances", "list", "--project=$ProjectId")
+Invoke-Gcloud "bigquery_datasets" @("alpha", "bq", "ls", "--project_id=$ProjectId") 
+
+# 9. Storage
+Invoke-Gcloud "storage_buckets" @("storage", "buckets", "list", "--project=$ProjectId")
+Invoke-Gcloud "filestore_instances" @("filestore", "instances", "list", "--project=$ProjectId")
+
+# 10. Messaging
+Invoke-Gcloud "pubsub_topics" @("pubsub", "topics", "list", "--project=$ProjectId")
+Invoke-Gcloud "pubsub_subscriptions" @("pubsub", "subscriptions", "list", "--project=$ProjectId")
+Invoke-Gcloud "scheduler_jobs" @("scheduler", "jobs", "list", "--project=$ProjectId", "--location=-")
+
+# 11. Artifact Registry
+Invoke-Gcloud "artifact_repositories" @(
+    "artifacts", "repositories", "list",
+    "--project=$ProjectId",
+    "--location=all"
+)
+
+# 12. IAM and Security
+Invoke-Gcloud "service_accounts" @("iam", "service-accounts", "list", "--project=$ProjectId")
+Invoke-Gcloud "secret_manager_secrets" @("secrets", "list", "--project=$ProjectId")
+Invoke-Gcloud "kms_locations" @("kms", "locations", "list")
+
+# 13. Monitoring
+Invoke-Gcloud "alert_policies" @("monitoring", "policies", "list", "--project=$ProjectId")
+Invoke-Gcloud "notification_channels" @("monitoring", "channels", "list", "--project=$ProjectId")
+
+Write-Log "========================================"
+Write-Log "DISCOVERY COMPLETED"
+Write-Log "Project: $ProjectId"
+Write-Log "Output: $OutputDir"
+Write-Log "========================================"
