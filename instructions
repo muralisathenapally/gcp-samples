@@ -1,0 +1,3 @@
+gcloud services enable cloudasset.googleapis.com --project=YOUR_PROJECT_ID
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\gcp-resource-discovery.ps1 -ProjectId "YOUR_PROJECT_ID"
